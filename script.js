@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // File System Mock
     const fileSystem = {
         'about.txt': 'I am a student graduating in 2026, and also a Security Analysis Engineer.\nInterests: Red/Blue Team Tool Dev, AI Tool Dev, LLM, Web Security.',
-        'projects.txt': 'Hexstrike-ai-6.2: AI-powered tool for Hexstrike.',
+        'projects.txt': 'Hexstrike-ai-6.2: AI-powered tool for Hexstrike.\nAutoRedTeam-Orchestrator: AI-driven fully automated red team penetration testing agent.',
         'contact.txt': 'Email: Coff0xc@protonmail.com',
         'skills.txt': 'Languages: Python, Go, C/C++, Verilog\nRoles: Security Analysis, IC Design',
         'secret.txt': 'Flag{Y0u_F0und_M3!}'
