@@ -3,52 +3,104 @@
     "nav": {
       "home": "首页",
       "projects": "项目",
-      "okr": "OKR",
+      "okr": "进展",
       "about": "关于"
+    },
+    "home": {
+      "title": "安全工程 · 智能驱动"
     },
     "okr": {
       "title": "2026 OKR",
+      "lastUpdate": "最后更新",
       "openSource": "开源贡献",
       "bugBounty": "漏洞实战",
-      "engineering": "工程规模",
-      "research": "学术复现"
+      "engineering": "代码工程",
+      "research": "学术安全",
+      "metrics": {
+        "pr": "PR 提交",
+        "contributions": "GitHub 贡献",
+        "total": "漏洞总数",
+        "loc": "代码行数",
+        "papers": "论文复现",
+        "cve": "CVE 编号"
+      }
     },
     "projects": {
-      "title": "项目"
+      "title": "项目实战",
+      "hexstrike": "Hexstrike-ai-6.2",
+      "hexstrike_desc": "基于 Yenn.exe 分支深度定制的红队自动化工具，针对语义分析与命令编排进行了多项功能增强。",
+      "orchestrator": "AutoRedTeam-Orch",
+      "orchestrator_desc": "全自动红队渗透智能体，支持智能目标分析、自动化执行与报告生成。",
+      "api_scan": "Github-API-scan",
+      "api_scan_desc": "GitHub 敏感信息泄露扫描器，支持 OpenAI/Claude 等多平台 Key 异步验证与 TUI 面板。",
+      "llm_sec": "LLM-Security-Framework",
+      "llm_sec_desc": "专门用于评估大语言模型安全性的研究框架，涵盖对抗性攻击与防御评估。"
     },
     "about": {
-      "title": "关于",
-      "intro": "我是一名 2026 届毕业生，同时也是一名<strong>安全分析工程师</strong>，现居<strong>中国北京</strong>。",
-      "roles": "当前职位:",
-      "techStack": "技术栈:",
-      "interests": "兴趣方向:",
-      "contact": "联系方式:"
+      "title": "简历及简介",
+      "intro": "我是一名 2026 届毕业生，目前在 <strong>360 (Qihoo 360)</strong> 担任 <strong>L2 安全分析工程师</strong>。专注于高风险环境下的威胁缓解、红队自动化以及 LLM 安全评估。",
+      "roles": "职业经历",
+      "techStack": "技术细节",
+      "interests": "研究方向",
+      "contact": "联系方式",
+      "roles_list": "<li><strong>360</strong> / L2 安全分析工程师 (2025.08 - 至今)</li><li><strong>奇安信</strong> / 安全服务实习生 (2025.05 - 2025.07)</li><li><strong>东软</strong> / 运维工程师 (2024.09 - 2025.04)</li><li><strong>集成电路设计</strong> / 在读学生</li>",
+      "interests_desc": "红队自动化 (Red Team Ops), 威胁情报分析, LLM 攻防, 内核安全, 硬件漏洞利用 (Embedded Exploitation)"
+    },
+    "footer": {
+      "status": "系统状态",
+      "nominal": "运营中"
     }
   },
   "en": {
     "nav": {
       "home": "Home",
       "projects": "Projects",
-      "okr": "OKR",
+      "okr": "Goals",
       "about": "About"
+    },
+    "home": {
+      "title": "Security Engineering."
     },
     "okr": {
       "title": "2026 OKR",
+      "lastUpdate": "Last Update",
       "openSource": "Open Source",
       "bugBounty": "Bug Bounty",
       "engineering": "Engineering",
-      "research": "Research"
+      "research": "SEC Research",
+      "metrics": {
+        "pr": "Pull Requests",
+        "contributions": "GitHub Contributions",
+        "total": "Total Bugs",
+        "loc": "Lines of Code",
+        "papers": "Paper Repos",
+        "cve": "CVE IDs"
+      }
     },
     "projects": {
-      "title": "Projects"
+      "title": "Projects",
+      "hexstrike": "Hexstrike-ai-6.2",
+      "hexstrike_desc": "Deeply customized Red Teaming tool based on Yenn.exe, enhanced with advanced semantic orchestration.",
+      "orchestrator": "AutoRedTeam-Orch",
+      "orchestrator_desc": "Autonomous agent for offensive security, featuring intelligent target analysis and automated execution.",
+      "api_scan": "Github-API-scan",
+      "api_scan_desc": "Scanner for leaked Github API keys with async validation for OpenAI/Claude and a TUI dashboard.",
+      "llm_sec": "LLM-Security-Framework",
+      "llm_sec_desc": "Specialized framework for evaluating Large Language Model security, including adversarial testing."
     },
     "about": {
-      "title": "About",
-      "intro": "I am a student graduating in 2026, and also a <strong>Security Analysis Engineer</strong> based in <strong>Beijing, China</strong>.",
-      "roles": "Current Roles:",
-      "techStack": "Tech Stack:",
-      "interests": "Interests:",
-      "contact": "Contact:"
+      "title": "About & Career",
+      "intro": "I am a student graduating in 2026, currently serving as an <strong>L2 Security Analysis Engineer</strong> at <strong>360 (Qihoo 360)</strong>. Specialized in threat mitigation, red team automation, and LLM security.",
+      "roles": "Experience",
+      "techStack": "Technical Stack",
+      "interests": "Interests",
+      "contact": "Contact",
+      "roles_list": "<li><strong>360</strong> / L2 Security Analysis Engineer (2025.08 - Present)</li><li><strong>QiAnXin</strong> / Sec Service Intern (2025.05 - 2025.07)</li><li><strong>Neusoft</strong> / O&M Engineer (2024.09 - 2025.04)</li><li><strong>IC Design</strong> / Student</li>",
+      "interests_desc": "Red Team Automation, Threat Intelligence, LLM Security, Kernel Internals, Hardware Exploitation"
+    },
+    "footer": {
+      "status": "System status",
+      "nominal": "NOMINAL"
     }
   }
 }

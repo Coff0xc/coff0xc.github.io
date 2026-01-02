@@ -1,13 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     let currentLang = localStorage.getItem('lang') || 'en';
     let i18nData = {};
+    let okrData = null;
 
-    // Load i18n and OKR data
+    // Load data
     Promise.all([
         fetch('i18n.json').then(res => res.json()),
         fetch('okr-2026.json').then(res => res.json())
-    ]).then(([i18n, okrData]) => {
+    ]).then(([i18n, okr]) => {
         i18nData = i18n;
+        okrData = okr;
         loadOKR(okrData);
         updateLanguage(currentLang);
     });
@@ -16,38 +18,45 @@ document.addEventListener('DOMContentLoaded', () => {
         currentLang = currentLang === 'en' ? 'zh' : 'en';
         localStorage.setItem('lang', currentLang);
         updateLanguage(currentLang);
+        if (okrData) loadOKR(okrData);
     });
 
     function loadOKR(data) {
         const container = document.getElementById('okr-container');
+        if (!container) return;
+
+        container.innerHTML = '';
         Object.entries(data.goals).forEach(([key, goal]) => {
-            const card = document.createElement('div');
-            card.className = 'okr-card';
-            card.dataset.goalKey = key;
-            let metricsHTML = '';
+            const goalTitle = i18nData[currentLang]?.okr?.[key] || key;
+            const goalHeader = document.createElement('h3');
+            goalHeader.style.fontSize = '12px';
+            goalHeader.style.marginTop = '40px';
+            goalHeader.style.marginBottom = '20px';
+            goalHeader.style.color = 'var(--text)';
+            goalHeader.textContent = goalTitle.toUpperCase();
+            container.appendChild(goalHeader);
+
             Object.entries(goal.metrics).forEach(([metricKey, metric]) => {
-                const progress = typeof metric.target === 'number' ?
-                    Math.min((metric.current / metric.target) * 100, 100) : 0;
-                const displayTarget = typeof metric.target === 'number' ?
-                    metric.target.toLocaleString() : metric.target;
-                const displayCurrent = typeof metric.current === 'number' ?
-                    metric.current.toLocaleString() : metric.current;
-                metricsHTML += `
-                    <div class="okr-metric">
-                        <div class="okr-metric-label">${metricKey.toUpperCase()}</div>
-                        <div class="okr-progress-bar">
-                            <div class="okr-progress-fill" style="width: ${progress}%"></div>
-                            <div class="okr-progress-text">${displayCurrent} / ${displayTarget}</div>
-                        </div>
-                    </div>`;
+                const progress = Math.min((metric.current / metric.target) * 100, 100);
+                const metricLabel = i18nData[currentLang]?.okr?.metrics?.[metricKey] || metricKey.toUpperCase();
+
+                const row = document.createElement('div');
+                row.className = 'okr-row';
+                row.innerHTML = `
+                    <div class="okr-info">
+                        <span>${metricLabel}</span>
+                        <span>${metric.current.toLocaleString()} / ${metric.target.toLocaleString()}</span>
+                    </div>
+                    <div class="okr-bar-bg">
+                        <div class="okr-bar-fill" style="width: ${progress}%"></div>
+                    </div>
+                `;
+                container.appendChild(row);
             });
-            card.innerHTML = `<h3></h3>${metricsHTML}`;
-            container.appendChild(card);
         });
     }
 
     function updateLanguage(lang) {
-        document.getElementById('lang-toggle').textContent = lang === 'en' ? '中文' : 'EN';
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
             const keys = key.split('.');
@@ -56,233 +65,43 @@ document.addEventListener('DOMContentLoaded', () => {
             if (value) el.innerHTML = value;
         });
 
-        // Update OKR titles
-        document.querySelectorAll('.okr-card').forEach(card => {
-            const key = card.dataset.goalKey;
-            const h3 = card.querySelector('h3');
-            if (h3 && i18nData[lang]?.okr?.[key]) {
-                h3.textContent = i18nData[lang].okr[key];
+        // Active Nav State
+        document.querySelectorAll('nav a').forEach(a => {
+            if (a.getAttribute('href') === window.location.hash) {
+                a.classList.add('active');
+            } else {
+                a.classList.remove('active');
             }
         });
     }
 
-    // Smooth scrolling for navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
-    });
-
-    // Intersection Observer for Fade-in Animations
-    const observerOptions = {
-        threshold: 0.1
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, observerOptions);
-
-    document.querySelectorAll('.fade-in').forEach(section => {
-        observer.observe(section);
-    });
-
-    // Terminal Logic
+    // Terminal - Pure Minimalism
     const terminalOutput = document.getElementById('terminal-output');
-    const commandInput = document.getElementById('command-input');
-    const terminalWindow = document.getElementById('terminal');
-    const inputLine = document.getElementById('input-line');
-
-    let commandHistory = [];
-    let historyIndex = -1;
-
-    // File System Mock
-    const fileSystem = {
-        'projects.txt': `[1] AI-Based HTTP Traffic Analysis Agent (Work in Progress)
-    -------------------------------------------------------
-    > Architecture: Dual-layer judgment system (L1: Traffic Analysis, L2: Security Verdict).
-    > Model: Self-trained proprietary model (Non-opensource).
-    > Goal: Automated detection of malicious HTTP requests/responses without relying on public signatures.
-
-[2] STM32 Abnormal Vibration Monitoring System (Graduation Thesis)
-    -------------------------------------------------------
-    > Core: STM32 Microcontroller + Isolation Forest Algorithm.
-    > Function: Real-time equipment anomaly detection on edge devices.`,
-        'contact.info': `Email: Q29mZjB4Y0Bwcm90b25tYWlsLmNvbQ== (Try 'base64 -d' if you can)
-PGP Public Key Block:
------BEGIN PGP PUBLIC KEY BLOCK-----
-mQINBGI... (Truncated for brevity)
------END PGP PUBLIC KEY BLOCK-----`,
-        'about.txt': 'I am a student graduating in 2026, and also a Security Analysis Engineer.\nInterests: Red/Blue Team Tool Dev, AI Tool Dev, LLM, Web Security.',
-        'blog_posts.md': '2024-11-25: How to build a terminal portfolio\n2024-10-10: Understanding STM32 Security',
-        'resume.pdf': '[Binary file]'
-    };
-
-    // Boot Sequence
     const bootLines = [
-        "Initializing kernel...",
-        "Loading modules...",
-        "Mounting file system...",
-        "Starting network services...",
-        "Connected to 127.0.0.1",
-        "Welcome to Coff0xc OS v1.0.2",
-        "Type 'help' to start."
+        "> INITIALIZING_SYSTEM_CORE...",
+        "> LOADING_ENCLAVE_MODULES...",
+        "> NETWORK_CONNECTION_STABLE",
+        "> COFF0XC_SHELL_READY"
     ];
 
-    let bootIndex = 0;
-
-    function runBootSequence() {
-        if (bootIndex < bootLines.length) {
-            const line = document.createElement('div');
-            line.className = 'output-line';
-            line.textContent = `[ OK ] ${bootLines[bootIndex]}`;
-            terminalOutput.appendChild(line);
-            bootIndex++;
-            scrollToBottom();
-            setTimeout(runBootSequence, 300); // Delay between lines
+    let lineIdx = 0;
+    function typeTerminal() {
+        if (lineIdx < bootLines.length) {
+            const p = document.createElement('div');
+            p.className = 'terminal-line';
+            p.textContent = bootLines[lineIdx];
+            terminalOutput.appendChild(p);
+            lineIdx++;
+            setTimeout(typeTerminal, 150);
         } else {
-            // Show input line after boot
-            inputLine.classList.remove('hidden');
-            commandInput.focus();
+            const p = document.createElement('div');
+            p.className = 'terminal-line cmd';
+            p.innerHTML = 'root@coff0xc:~$ <span class="cursor"></span>';
+            terminalOutput.appendChild(p);
         }
     }
+    setTimeout(typeTerminal, 500);
 
-    // Start boot sequence
-    setTimeout(runBootSequence, 500);
-
-    if (terminalWindow && commandInput && terminalOutput) {
-        // Focus input when clicking anywhere in the terminal
-        terminalWindow.addEventListener('click', () => {
-            if (!inputLine.classList.contains('hidden')) {
-                commandInput.focus();
-            }
-        });
-
-        commandInput.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-                const command = this.value.trim();
-                if (command) {
-                    // Save to history
-                    commandHistory.push(command);
-                    historyIndex = commandHistory.length;
-
-                    // Echo command
-                    addToOutput(`<span class="prompt"><span class="user">root@coff0xc</span>:<span class="path">~</span>#</span> ${command}`);
-                    // Process command
-                    processCommand(command);
-                } else {
-                    addToOutput(`<span class="prompt"><span class="user">root@coff0xc</span>:<span class="path">~</span>#</span>`);
-                }
-                this.value = '';
-                scrollToBottom();
-            } else if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                if (historyIndex > 0) {
-                    historyIndex--;
-                    this.value = commandHistory[historyIndex];
-                }
-            } else if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                if (historyIndex < commandHistory.length - 1) {
-                    historyIndex++;
-                    this.value = commandHistory[historyIndex];
-                } else {
-                    historyIndex = commandHistory.length;
-                    this.value = '';
-                }
-            }
-        });
-    }
-
-    function addToOutput(html) {
-        const div = document.createElement('div');
-        div.className = 'output-line';
-        div.innerHTML = html;
-        terminalOutput.appendChild(div);
-    }
-
-    function scrollToBottom() {
-        terminalOutput.scrollTop = terminalOutput.scrollHeight;
-    }
-
-    function processCommand(cmd) {
-        const args = cmd.split(' ');
-        const mainCmd = args[0].toLowerCase();
-
-        switch (mainCmd) {
-            case 'help':
-                addToOutput('Available commands:');
-                addToOutput('  <span style="color:var(--accent-color)">help</span>     - Show this help message');
-                addToOutput('  <span style="color:var(--accent-color)">whoami</span>   - Display user information');
-                addToOutput('  <span style="color:var(--accent-color)">ls</span>       - List files');
-                addToOutput('  <span style="color:var(--accent-color)">cat</span>      - Read file content (e.g., cat projects.txt)');
-                addToOutput('  <span style="color:var(--accent-color)">clear</span>    - Clear terminal output');
-                addToOutput('  <span style="color:var(--accent-color)">date</span>     - Show current date and time');
-                addToOutput('  <span style="color:var(--accent-color)">reboot</span>   - Reload the page');
-                break;
-            case 'whoami':
-                addToOutput(`User: coff0xc (uid=1000)
-Role: Web Security Researcher / CTF Player
-State: <span style="color:var(--accent-color)">ACTIVE</span>
-Location: CN (China)
-Focus: 
-  - Automated Penetration Testing
-  - AI-Driven Traffic Analysis (L1/L2 Judgement)
-  - Embedded Security (STM32)`);
-                break;
-            case 'ls':
-                if (args.includes('-la') || args.includes('-al') || args.includes('-l')) {
-                    addToOutput(`drwx------  2 coff0xc  sec   4096  Nov 21  .
-drwxr-xr-x  4 root     root  4096  Nov 21  ..
--rw-r--r--  1 coff0xc  sec   2048  Nov 25  projects.txt
--rw-r--r--  1 coff0xc  sec   1024  Nov 25  blog_posts.md
--rw-r--r--  1 coff0xc  sec    512  Nov 25  contact.info
--rw-r--r--  1 coff0xc  sec    300  Nov 25  about.txt
--rwxr-xr-x  1 coff0xc  sec   8192  Nov 25  resume.pdf`);
-                } else {
-                    addToOutput(Object.keys(fileSystem).join('  '));
-                }
-                break;
-            case 'cat':
-                if (args[1]) {
-                    const fileName = args[1];
-                    if (fileSystem[fileName]) {
-                        // Handle special formatting for projects.txt to preserve whitespace
-                        if (fileName === 'projects.txt' || fileName === 'contact.info') {
-                            addToOutput(`<pre style="margin:0; font-family:inherit;">${fileSystem[fileName]}</pre>`);
-                        } else {
-                            addToOutput(fileSystem[fileName]);
-                        }
-                    } else {
-                        addToOutput(`cat: ${fileName}: No such file or directory`);
-                    }
-                } else {
-                    addToOutput('Usage: cat [filename]');
-                }
-                break;
-            case 'clear':
-                terminalOutput.innerHTML = '';
-                break;
-            case 'date':
-                addToOutput(new Date().toString());
-                break;
-            case 'reboot':
-                addToOutput('Rebooting system...');
-                setTimeout(() => {
-                    location.reload();
-                }, 1000);
-                break;
-            case 'sudo':
-                addToOutput('User is not in the sudoers file. This incident will be reported.');
-                break;
-            default:
-                addToOutput(`bash: ${mainCmd}: command not found`);
-        }
-    }
+    // Nav switch
+    window.addEventListener('hashchange', () => updateLanguage(currentLang));
 });
