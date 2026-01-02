@@ -212,29 +212,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // Nav switch
     window.addEventListener('hashchange', updateActiveNav);
 
-    // GitHub Stats
+    // GitHub Stats - 从 OKR JSON 读取，避免 API 限流
     const statRepos = document.getElementById('stat-repos');
     const statFollowers = document.getElementById('stat-followers');
     const statStars = document.getElementById('stat-stars');
 
-    fetch('https://api.github.com/users/Coff0xc')
+    fetch('okr-2026.json')
         .then(res => res.json())
         .then(data => {
-            statRepos.textContent = data.public_repos || 0;
-            statFollowers.textContent = data.followers || 0;
+            if (data.stats) {
+                statRepos.textContent = data.stats.repos || 0;
+                statFollowers.textContent = data.stats.followers || 0;
+                statStars.textContent = data.stats.stars || 0;
+            }
         })
         .catch(() => {
             statRepos.textContent = '?';
             statFollowers.textContent = '?';
-        });
-
-    fetch('https://api.github.com/users/Coff0xc/repos?per_page=100')
-        .then(res => res.json())
-        .then(repos => {
-            const totalStars = repos.reduce((sum, repo) => sum + (repo.stargazers_count || 0), 0);
-            statStars.textContent = totalStars;
-        })
-        .catch(() => {
             statStars.textContent = '?';
         });
 });
