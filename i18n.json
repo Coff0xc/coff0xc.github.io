@@ -1,0 +1,54 @@
+{
+  "zh": {
+    "nav": {
+      "home": "首页",
+      "projects": "项目",
+      "okr": "OKR",
+      "about": "关于"
+    },
+    "okr": {
+      "title": "2026 OKR",
+      "openSource": "开源贡献",
+      "bugBounty": "漏洞实战",
+      "engineering": "工程规模",
+      "research": "学术复现"
+    },
+    "projects": {
+      "title": "项目"
+    },
+    "about": {
+      "title": "关于",
+      "intro": "我是一名 2026 届毕业生，同时也是一名<strong>安全分析工程师</strong>，现居<strong>中国北京</strong>。",
+      "roles": "当前职位:",
+      "techStack": "技术栈:",
+      "interests": "兴趣方向:",
+      "contact": "联系方式:"
+    }
+  },
+  "en": {
+    "nav": {
+      "home": "Home",
+      "projects": "Projects",
+      "okr": "OKR",
+      "about": "About"
+    },
+    "okr": {
+      "title": "2026 OKR",
+      "openSource": "Open Source",
+      "bugBounty": "Bug Bounty",
+      "engineering": "Engineering",
+      "research": "Research"
+    },
+    "projects": {
+      "title": "Projects"
+    },
+    "about": {
+      "title": "About",
+      "intro": "I am a student graduating in 2026, and also a <strong>Security Analysis Engineer</strong> based in <strong>Beijing, China</strong>.",
+      "roles": "Current Roles:",
+      "techStack": "Tech Stack:",
+      "interests": "Interests:",
+      "contact": "Contact:"
+    }
+  }
+}
