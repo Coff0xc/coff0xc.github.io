@@ -46,10 +46,45 @@
       "roles_list": "<li><strong>360</strong> / L2 安全分析工程师 (2025.08 - 至今)</li><li><strong>奇安信</strong> / 安全服务实习生 (2025.05 - 2025.07)</li><li><strong>东软</strong> / 运维工程师 (2024.09 - 2025.04)</li><li><strong>集成电路设计</strong> / 在读学生</li>",
       "interests_desc": "红队自动化 (Red Team Ops), 威胁情报分析, LLM 攻防, 内核安全, 硬件漏洞利用 (Embedded Exploitation)"
     },
+    "sidebar": {
+      "stats": "数据统计",
+      "repos": "仓库",
+      "followers": "关注者",
+      "stars": "星标",
+      "techStack": "技术栈",
+      "focus": "专注领域",
+      "focus1": "红队自动化",
+      "focus2": "LLM 安全",
+      "focus3": "内核研究",
+      "links": "链接"
+    },
+    "theme": {
+      "light": "☀ 浅色",
+      "dark": "☾ 深色"
+    },
     "footer": {
       "status": "系统状态",
       "nominal": "运营中"
-    }
+    },
+    "projects_meta": {
+      "meta1": "01 / 智能攻防",
+      "meta2": "02 / 侦察扫描",
+      "meta3": "03 / 红队工具",
+      "meta4": "04 / 安全研究"
+    },
+    "terminal": {
+      "line1": "> 正在初始化系统核心...",
+      "line2": "> 加载安全模块中...",
+      "line3": "> 网络连接稳定",
+      "line4": "> COFF0XC_SHELL 就绪",
+      "prompt": "root@coff0xc:~$"
+    },
+    "seo": {
+      "title": "COFF0XC - 安全工程",
+      "description": "安全工程师 | 红队自动化、LLM 安全、内核研究"
+    },
+    "backToTop": "返回顶部",
+    "shortcuts": "快捷键: L 切换语言, T 切换主题"
   },
   "en": {
     "nav": {
@@ -98,9 +133,44 @@
       "roles_list": "<li><strong>360</strong> / L2 Security Analysis Engineer (2025.08 - Present)</li><li><strong>QiAnXin</strong> / Sec Service Intern (2025.05 - 2025.07)</li><li><strong>Neusoft</strong> / O&M Engineer (2024.09 - 2025.04)</li><li><strong>IC Design</strong> / Student</li>",
       "interests_desc": "Red Team Automation, Threat Intelligence, LLM Security, Kernel Internals, Hardware Exploitation"
     },
+    "sidebar": {
+      "stats": "Quick Stats",
+      "repos": "Repos",
+      "followers": "Followers",
+      "stars": "Stars",
+      "techStack": "Tech Stack",
+      "focus": "Focus",
+      "focus1": "Red Team Automation",
+      "focus2": "LLM Security",
+      "focus3": "Kernel Internals",
+      "links": "Links"
+    },
+    "theme": {
+      "light": "☀ Light",
+      "dark": "☾ Dark"
+    },
     "footer": {
       "status": "System status",
       "nominal": "NOMINAL"
-    }
+    },
+    "projects_meta": {
+      "meta1": "01 / Agentic Offensive",
+      "meta2": "02 / Recon + Scan",
+      "meta3": "03 / Red Tooling",
+      "meta4": "04 / Research"
+    },
+    "terminal": {
+      "line1": "> INITIALIZING_SYSTEM_CORE...",
+      "line2": "> LOADING_ENCLAVE_MODULES...",
+      "line3": "> NETWORK_CONNECTION_STABLE",
+      "line4": "> COFF0XC_SHELL_READY",
+      "prompt": "root@coff0xc:~$"
+    },
+    "seo": {
+      "title": "COFF0XC - Security Engineering",
+      "description": "Security Engineer | Red Team Automation, LLM Security, Kernel Internals"
+    },
+    "backToTop": "Back to Top",
+    "shortcuts": "Shortcuts: L for language, T for theme"
   }
 }

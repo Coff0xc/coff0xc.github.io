@@ -1,7 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
-    let currentLang = localStorage.getItem('lang') || 'en';
+    // 系统主题检测
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const browserLang = navigator.language.startsWith('zh') ? 'zh' : 'en';
+
+    let currentLang = localStorage.getItem('lang') || browserLang;
+    let currentTheme = localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light');
     let i18nData = {};
     let okrData = null;
+
+    // Apply saved theme
+    if (currentTheme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+    }
+
+    // 监听系统主题变化
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        if (!localStorage.getItem('theme')) {
+            currentTheme = e.matches ? 'dark' : 'light';
+            applyTheme();
+        }
+    });
 
     // Load data
     Promise.all([
@@ -12,14 +30,65 @@ document.addEventListener('DOMContentLoaded', () => {
         okrData = okr;
         loadOKR(okrData);
         updateLanguage(currentLang);
+        updateThemeButton();
+        typeTerminal();
+        updateSEO();
     });
 
-    document.getElementById('lang-toggle').addEventListener('click', () => {
+    // Language toggle
+    document.getElementById('lang-toggle').addEventListener('click', toggleLanguage);
+
+    // Theme toggle
+    document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+
+    // 键盘快捷键
+    document.addEventListener('keydown', e => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        if (e.key.toLowerCase() === 'l') toggleLanguage();
+        if (e.key.toLowerCase() === 't') toggleTheme();
+    });
+
+    function toggleLanguage() {
         currentLang = currentLang === 'en' ? 'zh' : 'en';
         localStorage.setItem('lang', currentLang);
         updateLanguage(currentLang);
         if (okrData) loadOKR(okrData);
-    });
+        resetTerminal();
+        updateSEO();
+    }
+
+    function toggleTheme() {
+        currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('theme', currentTheme);
+        applyTheme();
+    }
+
+    function applyTheme() {
+        if (currentTheme === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+        }
+        updateThemeButton();
+    }
+
+    function updateThemeButton() {
+        const btn = document.getElementById('theme-toggle');
+        const themeText = currentTheme === 'dark'
+            ? i18nData[currentLang]?.theme?.light
+            : i18nData[currentLang]?.theme?.dark;
+        btn.textContent = themeText || (currentTheme === 'dark' ? '☀ Light' : '☾ Dark');
+    }
+
+    function updateSEO() {
+        const seo = i18nData[currentLang]?.seo;
+        if (seo) {
+            document.title = seo.title;
+            document.querySelector('meta[name="description"]')?.setAttribute('content', seo.description);
+            document.querySelector('meta[property="og:title"]')?.setAttribute('content', seo.title);
+            document.querySelector('meta[property="og:description"]')?.setAttribute('content', seo.description);
+        }
+    }
 
     function loadOKR(data) {
         const container = document.getElementById('okr-container');
@@ -29,10 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Object.entries(data.goals).forEach(([key, goal]) => {
             const goalTitle = i18nData[currentLang]?.okr?.[key] || key;
             const goalHeader = document.createElement('h3');
-            goalHeader.style.fontSize = '12px';
-            goalHeader.style.marginTop = '40px';
-            goalHeader.style.marginBottom = '20px';
-            goalHeader.style.color = 'var(--text)';
+            goalHeader.style.cssText = 'font-size:12px;margin-top:40px;margin-bottom:20px;color:var(--text)';
             goalHeader.textContent = goalTitle.toUpperCase();
             container.appendChild(goalHeader);
 
@@ -45,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 row.innerHTML = `
                     <div class="okr-info">
                         <span>${metricLabel}</span>
-                        <span>${metric.current.toLocaleString()} / ${metric.target.toLocaleString()}</span>
+                        <span>${metric.current.toLocaleString()} / ${metric.target.toLocaleString()} <span class="okr-percent">(${Math.round(progress)}%)</span></span>
                     </div>
                     <div class="okr-bar-bg">
                         <div class="okr-bar-fill" style="width: ${progress}%"></div>
@@ -57,6 +123,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateLanguage(lang) {
+        document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
             const keys = key.split('.');
@@ -65,43 +133,108 @@ document.addEventListener('DOMContentLoaded', () => {
             if (value) el.innerHTML = value;
         });
 
-        // Active Nav State
-        document.querySelectorAll('nav a').forEach(a => {
-            if (a.getAttribute('href') === window.location.hash) {
-                a.classList.add('active');
-            } else {
-                a.classList.remove('active');
-            }
-        });
+        updateThemeButton();
+        updateActiveNav();
     }
 
-    // Terminal - Pure Minimalism
-    const terminalOutput = document.getElementById('terminal-output');
-    const bootLines = [
-        "> INITIALIZING_SYSTEM_CORE...",
-        "> LOADING_ENCLAVE_MODULES...",
-        "> NETWORK_CONNECTION_STABLE",
-        "> COFF0XC_SHELL_READY"
-    ];
+    // 滚动导航高亮 (Intersection Observer)
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('nav a');
 
+    const observerOptions = { rootMargin: '-20% 0px -70% 0px' };
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.id;
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+                });
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => observer.observe(section));
+
+    function updateActiveNav() {
+        const hash = window.location.hash || '#home';
+        navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === hash));
+    }
+
+    // Terminal
+    const terminalOutput = document.getElementById('terminal-output');
     let lineIdx = 0;
+    let terminalTimeout = null;
+
+    function getBootLines() {
+        const t = i18nData[currentLang]?.terminal;
+        return t ? [t.line1, t.line2, t.line3, t.line4] : [
+            "> INITIALIZING_SYSTEM_CORE...",
+            "> LOADING_ENCLAVE_MODULES...",
+            "> NETWORK_CONNECTION_STABLE",
+            "> COFF0XC_SHELL_READY"
+        ];
+    }
+
     function typeTerminal() {
+        const bootLines = getBootLines();
         if (lineIdx < bootLines.length) {
             const p = document.createElement('div');
             p.className = 'terminal-line';
             p.textContent = bootLines[lineIdx];
             terminalOutput.appendChild(p);
             lineIdx++;
-            setTimeout(typeTerminal, 150);
+            terminalTimeout = setTimeout(typeTerminal, 150);
         } else {
+            const prompt = i18nData[currentLang]?.terminal?.prompt || 'root@coff0xc:~$';
             const p = document.createElement('div');
             p.className = 'terminal-line cmd';
-            p.innerHTML = 'root@coff0xc:~$ <span class="cursor"></span>';
+            p.innerHTML = `${prompt} <span class="cursor"></span>`;
             terminalOutput.appendChild(p);
         }
     }
-    setTimeout(typeTerminal, 500);
+
+    function resetTerminal() {
+        clearTimeout(terminalTimeout);
+        terminalOutput.innerHTML = '';
+        lineIdx = 0;
+        setTimeout(typeTerminal, 300);
+    }
+
+    // 返回顶部按钮
+    const backToTop = document.getElementById('back-to-top');
+    window.addEventListener('scroll', () => {
+        backToTop.classList.toggle('visible', window.scrollY > 300);
+    });
+    backToTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 
     // Nav switch
-    window.addEventListener('hashchange', () => updateLanguage(currentLang));
+    window.addEventListener('hashchange', updateActiveNav);
+
+    // GitHub Stats
+    const statRepos = document.getElementById('stat-repos');
+    const statFollowers = document.getElementById('stat-followers');
+    const statStars = document.getElementById('stat-stars');
+
+    fetch('https://api.github.com/users/Coff0xc')
+        .then(res => res.json())
+        .then(data => {
+            statRepos.textContent = data.public_repos || 0;
+            statFollowers.textContent = data.followers || 0;
+        })
+        .catch(() => {
+            statRepos.textContent = '?';
+            statFollowers.textContent = '?';
+        });
+
+    fetch('https://api.github.com/users/Coff0xc/repos?per_page=100')
+        .then(res => res.json())
+        .then(repos => {
+            const totalStars = repos.reduce((sum, repo) => sum + (repo.stargazers_count || 0), 0);
+            statStars.textContent = totalStars;
+        })
+        .catch(() => {
+            statStars.textContent = '?';
+        });
 });
