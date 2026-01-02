@@ -1,0 +1,32 @@
+name: Sync OKR Data
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # 每 5 分钟
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Sync GitHub Stats
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python sync_okr.py
+
+      - name: Commit changes
+        run: |
+          git config user.name "Coff0xc"
+          git config user.email "122996251+Coff0xc@users.noreply.github.com"
+          git add okr-2026.json
+          git diff --staged --quiet || git commit -m "chore: auto sync OKR data"
+          git push

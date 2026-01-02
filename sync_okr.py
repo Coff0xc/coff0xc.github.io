@@ -2,10 +2,9 @@
 # -*- coding: utf-8 -*-
 """
 OKR 数据同步脚本
-自动从 GitHub 获取 contributions 和 PR 数量，并统计本地代码行数
+自动从 GitHub 获取 contributions、PR 数量和代码变更行数
 """
 import json
-import os
 import subprocess
 import sys
 from datetime import datetime
@@ -15,22 +14,24 @@ from pathlib import Path
 GITHUB_USERNAME = "Coff0xc"
 YEAR = 2026
 OKR_FILE = Path(__file__).parent / "okr-2026.json"
+GH_PATH = r"E:\Applocation\githubcli\gh.exe"  # Windows 本地路径，GitHub Actions 会用 'gh'
 
-# 本地仓库路径（用于统计代码行数，请填写你自己的路径）
-LOCAL_REPOS = [
-    # r"E:\workplace\AutoRedTeam-Orchestrator",
-    # r"E:\workplace\Github-API-scan",
-    # r"E:\workplace\Hexstrike-ai-6.2",
-    # r"E:\workplace\LLM-Security-Assessment-Framework",
-    # 添加更多本地仓库路径...
-]
+def get_gh_cmd():
+    """获取 gh 命令路径"""
+    import shutil
+    if shutil.which('gh'):
+        return 'gh'
+    return GH_PATH
 
 def get_github_contributions():
     """通过 GitHub CLI 获取年度贡献数（需要安装 gh）"""
     try:
-        # 使用 gh api 查询
-        cmd = f'gh api graphql -f query="query {{ user(login: \\"{GITHUB_USERNAME}\\") {{ contributionsCollection(from: \\"{YEAR}-01-01T00:00:00Z\\", to: \\"{YEAR}-12-31T23:59:59Z\\") {{ contributionCalendar {{ totalContributions }} }} }} }}"'
-        result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+        gh = get_gh_cmd()
+        query = f'''query {{ user(login: "{GITHUB_USERNAME}") {{ contributionsCollection(from: "{YEAR}-01-01T00:00:00Z", to: "{YEAR}-12-31T23:59:59Z") {{ contributionCalendar {{ totalContributions }} }} }} }}'''
+        result = subprocess.run(
+            [gh, 'api', 'graphql', '-f', f'query={query}'],
+            capture_output=True, text=True
+        )
         if result.returncode == 0:
             data = json.loads(result.stdout)
             return data['data']['user']['contributionsCollection']['contributionCalendar']['totalContributions']
@@ -41,8 +42,12 @@ def get_github_contributions():
 def get_github_prs():
     """通过 GitHub CLI 获取年度 PR 数量"""
     try:
-        cmd = f'gh search prs --author={GITHUB_USERNAME} --created={YEAR}-01-01..{YEAR}-12-31 --json number --limit 1000'
-        result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+        gh = get_gh_cmd()
+        result = subprocess.run(
+            [gh, 'search', 'prs', f'--author={GITHUB_USERNAME}',
+             f'--created={YEAR}-01-01..{YEAR}-12-31', '--json', 'number', '--limit', '1000'],
+            capture_output=True, text=True
+        )
         if result.returncode == 0:
             prs = json.loads(result.stdout)
             return len(prs)
@@ -50,28 +55,58 @@ def get_github_prs():
         print(f"[WARN] 无法通过 gh 获取 PRs: {e}")
     return None
 
-def count_lines_of_code(repo_paths):
-    """统计本地仓库代码行数（需要安装 cloc 或 tokei）"""
+def get_github_loc():
+    """统计 GitHub 所有仓库的代码变更行数 (additions + deletions)"""
     total_loc = 0
-    for repo in repo_paths:
-        if not os.path.exists(repo):
-            print(f"[SKIP] 路径不存在: {repo}")
-            continue
-        try:
-            # 尝试使用 cloc
-            result = subprocess.run(
-                ['cloc', '--json', '--quiet', repo],
+    gh = get_gh_cmd()
+    try:
+        # 获取用户所有仓库
+        result = subprocess.run(
+            [gh, 'repo', 'list', GITHUB_USERNAME, '--json', 'nameWithOwner', '--limit', '500'],
+            capture_output=True, text=True
+        )
+        if result.returncode != 0:
+            print(f"[WARN] 无法获取仓库列表")
+            return None
+
+        repos = json.loads(result.stdout)
+        start_date = f"{YEAR}-01-01"
+        end_date = f"{YEAR}-12-31"
+
+        for repo in repos:
+            repo_name = repo['nameWithOwner']
+            # 获取该仓库中用户的 commits
+            commits_result = subprocess.run(
+                [gh, 'api', f'repos/{repo_name}/commits?author={GITHUB_USERNAME}&since={start_date}T00:00:00Z&until={end_date}T23:59:59Z&per_page=100',
+                 '-q', '.[].sha'],
                 capture_output=True, text=True
             )
-            if result.returncode == 0:
-                data = json.loads(result.stdout)
-                if 'SUM' in data:
-                    total_loc += data['SUM']['code']
-                    print(f"[OK] {repo}: {data['SUM']['code']} 行")
-        except FileNotFoundError:
-            print("[INFO] 未安装 cloc，请运行: pip install cloc 或 choco install cloc")
-            break
-    return total_loc
+            if commits_result.returncode != 0:
+                continue
+
+            shas = [s for s in commits_result.stdout.strip().split('\n') if s]
+            repo_loc = 0
+            for sha in shas:
+                commit_result = subprocess.run(
+                    [gh, 'api', f'repos/{repo_name}/commits/{sha}',
+                     '-q', '.stats.additions + .stats.deletions'],
+                    capture_output=True, text=True
+                )
+                if commit_result.returncode == 0 and commit_result.stdout.strip():
+                    try:
+                        repo_loc += int(commit_result.stdout.strip())
+                    except ValueError:
+                        pass
+
+            if repo_loc > 0:
+                print(f"[OK] {repo_name}: {repo_loc:,} 行")
+                total_loc += repo_loc
+
+    except Exception as e:
+        print(f"[WARN] 统计 LOC 失败: {e}")
+        return None
+
+    return total_loc if total_loc > 0 else None
 
 def update_okr():
     """更新 OKR JSON 文件"""
@@ -89,12 +124,11 @@ def update_okr():
         okr['goals']['openSource']['metrics']['pr']['current'] = prs
         print(f"[SYNC] PRs: {prs}")
     
-    # 统计代码行数
-    if LOCAL_REPOS:
-        loc = count_lines_of_code(LOCAL_REPOS)
-        if loc > 0:
-            okr['goals']['engineering']['metrics']['loc']['current'] = loc
-            print(f"[SYNC] LOC: {loc}")
+    # 统计 GitHub 代码变更行数
+    loc = get_github_loc()
+    if loc is not None:
+        okr['goals']['engineering']['metrics']['loc']['current'] = loc
+        print(f"[SYNC] LOC: {loc:,}")
     
     # 更新时间戳
     okr['lastUpdate'] = datetime.now().strftime('%Y-%m-%d')
