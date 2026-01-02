@@ -1,4 +1,34 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Load OKR Data
+    fetch('okr-2026.json')
+        .then(res => res.json())
+        .then(data => {
+            const container = document.getElementById('okr-container');
+            Object.entries(data.goals).forEach(([key, goal]) => {
+                const card = document.createElement('div');
+                card.className = 'okr-card';
+                let metricsHTML = '';
+                Object.entries(goal.metrics).forEach(([metricKey, metric]) => {
+                    const progress = typeof metric.target === 'number' ?
+                        Math.min((metric.current / metric.target) * 100, 100) : 0;
+                    const displayTarget = typeof metric.target === 'number' ?
+                        metric.target.toLocaleString() : metric.target;
+                    const displayCurrent = typeof metric.current === 'number' ?
+                        metric.current.toLocaleString() : metric.current;
+                    metricsHTML += `
+                        <div class="okr-metric">
+                            <div class="okr-metric-label">${metricKey.toUpperCase()}</div>
+                            <div class="okr-progress-bar">
+                                <div class="okr-progress-fill" style="width: ${progress}%"></div>
+                                <div class="okr-progress-text">${displayCurrent} / ${displayTarget}</div>
+                            </div>
+                        </div>`;
+                });
+                card.innerHTML = `<h3>${goal.title}</h3>${metricsHTML}`;
+                container.appendChild(card);
+            });
+        });
+
     // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
