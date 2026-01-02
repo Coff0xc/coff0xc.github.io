@@ -22,11 +22,12 @@
         <header>
             <nav>
                 <ul>
-                    <li><a href="#home" class="nav-link">[Home]</a></li>
-                    <li><a href="#projects" class="nav-link">[Projects]</a></li>
-                    <li><a href="#okr" class="nav-link">[OKR]</a></li>
-                    <li><a href="#about" class="nav-link">[About]</a></li>
+                    <li><a href="#home" class="nav-link" data-i18n="nav.home">[Home]</a></li>
+                    <li><a href="#projects" class="nav-link" data-i18n="nav.projects">[Projects]</a></li>
+                    <li><a href="#okr" class="nav-link" data-i18n="nav.okr">[OKR]</a></li>
+                    <li><a href="#about" class="nav-link" data-i18n="nav.about">[About]</a></li>
                 </ul>
+                <button id="lang-toggle" class="lang-btn">中文</button>
             </nav>
         </header>
 
@@ -93,7 +94,7 @@
             </noscript>
 
             <section id="projects" class="fade-in">
-                <h2><span class="section-marker">#</span> Projects</h2>
+                <h2><span class="section-marker">#</span> <span data-i18n="projects.title">Projects</span></h2>
                 <div class="project-list">
                     <div class="project-item">
                         <div class="project-header">
@@ -127,12 +128,12 @@
             </section>
 
             <section id="okr" class="fade-in">
-                <h2><span class="section-marker">#</span> 2026 OKR</h2>
+                <h2><span class="section-marker">#</span> <span data-i18n="okr.title">2026 OKR</span></h2>
                 <div id="okr-container" class="okr-grid"></div>
             </section>
 
             <section id="about" class="fade-in">
-                <h2><span class="section-marker">#</span> About</h2>
+                <h2><span class="section-marker">#</span> <span data-i18n="about.title">About</span></h2>
                 <div class="about-card">
                     <div class="about-header">
                         <span class="user-avatar">[C]</span>
@@ -142,13 +143,13 @@
                         </div>
                     </div>
                     <div class="about-body">
-                        <p>
+                        <p data-i18n="about.intro">
                             I am a student graduating in 2026, and also a <strong>Security Analysis Engineer</strong>
                             based in <strong>Beijing, China</strong>.
                         </p>
                         <div class="info-grid">
                             <div class="info-item">
-                                <span class="label">Current Roles:</span>
+                                <span class="label" data-i18n="about.roles">Current Roles:</span>
                                 <ul>
                                     <li>360 Security Analysis Engineer</li>
                                     <li>Qianxin Security Service Engineer</li>
@@ -156,15 +157,15 @@
                                 </ul>
                             </div>
                             <div class="info-item">
-                                <span class="label">Tech Stack:</span>
+                                <span class="label" data-i18n="about.techStack">Tech Stack:</span>
                                 <p>Python, Go, C/C++, Verilog</p>
                             </div>
                             <div class="info-item">
-                                <span class="label">Interests:</span>
+                                <span class="label" data-i18n="about.interests">Interests:</span>
                                 <p>Red/Blue Team Tool Dev, AI Tool Dev, LLM, Web Security, Security Analysis, CTF</p>
                             </div>
                             <div class="info-item">
-                                <span class="label">Contact:</span>
+                                <span class="label" data-i18n="about.contact">Contact:</span>
                                 <p><a href="mailto:Coff0xc@protonmail.com" class="email-link">Coff0xc@protonmail.com</a>
                                 </p>
                             </div>

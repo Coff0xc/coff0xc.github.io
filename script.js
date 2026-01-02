@@ -1,4 +1,42 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // i18n
+    let currentLang = localStorage.getItem('lang') || 'en';
+    let i18nData = {};
+
+    fetch('i18n.json')
+        .then(res => res.json())
+        .then(data => {
+            i18nData = data;
+            updateLanguage(currentLang);
+        });
+
+    document.getElementById('lang-toggle').addEventListener('click', () => {
+        currentLang = currentLang === 'en' ? 'zh' : 'en';
+        localStorage.setItem('lang', currentLang);
+        updateLanguage(currentLang);
+    });
+
+    function updateLanguage(lang) {
+        document.getElementById('lang-toggle').textContent = lang === 'en' ? '中文' : 'EN';
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            const keys = key.split('.');
+            let value = i18nData[lang];
+            keys.forEach(k => value = value?.[k]);
+            if (value) el.innerHTML = value;
+        });
+
+        // Update OKR titles
+        const okrTitles = {
+            zh: { openSource: '开源贡献', bugBounty: '漏洞实战', engineering: '工程规模', research: '学术复现' },
+            en: { openSource: 'Open Source', bugBounty: 'Bug Bounty', engineering: 'Engineering', research: 'Research' }
+        };
+        document.querySelectorAll('.okr-card h3').forEach((el, i) => {
+            const keys = ['openSource', 'bugBounty', 'engineering', 'research'];
+            el.textContent = okrTitles[lang][keys[i]];
+        });
+    }
+
     // Load OKR Data
     fetch('okr-2026.json')
         .then(res => res.json())
