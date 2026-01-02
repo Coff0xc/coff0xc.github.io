@@ -2,8 +2,10 @@ name: Sync OKR Data
 
 on:
   schedule:
-    - cron: '*/5 * * * *'  # 每 5 分钟
-  workflow_dispatch:
+    - cron: '0 * * * *'  # 每小时整点同步
+  push:
+    branches: [main]  # 每次 push 后自动同步
+  workflow_dispatch:  # 手动触发
 
 permissions:
   contents: write
