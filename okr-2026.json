@@ -5,27 +5,45 @@
     "openSource": {
       "title": "开源贡献",
       "metrics": {
-        "pr": { "target": 50, "current": 0 },
-        "contributions": { "target": 2700, "current": 0 }
+        "contributions": {
+          "target": 2700,
+          "current": 9
+        },
+        "pr": {
+          "target": 50,
+          "current": 0
+        }
       }
     },
     "bugBounty": {
       "title": "漏洞实战",
       "metrics": {
-        "total": { "target": 130, "current": 0 }
+        "total": {
+          "target": 130,
+          "current": 0
+        }
       }
     },
     "engineering": {
       "title": "工程规模",
       "metrics": {
-        "loc": { "target": 1800000, "current": 0 }
+        "loc": {
+          "target": 1800000,
+          "current": 0
+        }
       }
     },
     "research": {
       "title": "学术复现",
       "metrics": {
-        "papers": { "target": 15, "current": 0 },
-        "cve": { "target": "3-5", "current": 0 }
+        "papers": {
+          "target": 15,
+          "current": 0
+        },
+        "cve": {
+          "target": 5,
+          "current": 0
+        }
       }
     }
   }
