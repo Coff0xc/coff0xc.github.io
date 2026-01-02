@@ -4,6 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="COFF0XC - Security Engineer | Red Team Automation, LLM Security, Kernel Internals">
+    <meta name="keywords" content="security engineer, red team, penetration testing, LLM security, offensive security">
+    <meta name="author" content="COFF0XC">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="COFF0XC - Security Engineering">
+    <meta property="og:description" content="Engineered Security. High Stakes. Red Team Automation, LLM Security, Kernel Internals.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://coff0xc.github.io">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="COFF0XC - Security Engineering">
+    <meta name="twitter:description" content="Engineered Security. High Stakes.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+    <!-- Font Preload -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" as="style">
+
     <title>COFF0XC / Index</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,8 +35,14 @@
 </head>
 
 <body>
+    <!-- Skip to content for accessibility -->
+    <a href="#home" class="skip-link">Skip to content</a>
+
+    <!-- Back to top button -->
+    <button id="back-to-top" class="back-to-top" aria-label="Back to top" title="Back to Top">↑</button>
+
     <div class="wrapper">
-        <aside>
+        <aside class="nav-sidebar" role="navigation" aria-label="Main navigation">
             <div class="aside-top">
                 <div class="brand">COFF0XC</div>
                 <nav>
@@ -33,90 +60,164 @@
                     Security Engineering
                 </div>
                 <button id="lang-toggle" class="lang-switch">ZH / EN</button>
+                <button id="theme-toggle" class="theme-switch">☀ Light</button>
             </div>
         </aside>
 
-        <main>
-            <section id="home" class="intro">
-                <h1 data-i18n="home.title">Engineered Security. High Stakes.</h1>
-                <div class="terminal-mini" id="terminal">
-                    <div id="terminal-output">
-                        <!-- Terminal content -->
-                    </div>
-                </div>
-            </section>
+        <main role="main" aria-label="Main content">
+            <div class="main-content">
+                <div class="content-left">
+                    <section id="home" class="intro">
+                        <h1 data-i18n="home.title">Engineered Security. High Stakes.</h1>
+                        <div class="terminal-mini" id="terminal">
+                            <div id="terminal-output">
+                                <!-- Terminal content -->
+                            </div>
+                        </div>
+                    </section>
 
-            <section id="projects">
-                <h2 data-i18n="projects.title">Select Projects</h2>
-                <div class="grid">
-                    <div class="item-card">
-                        <div class="item-meta">01 / Agentic Offensive</div>
-                        <h3><a href="https://github.com/Coff0xc/AutoRedTeam-Orchestrator" target="_blank"
-                                data-i18n="projects.orchestrator">AutoRedTeam-Orch</a></h3>
-                        <p data-i18n="projects.orchestrator_desc">Autonomous agent for offensive security. Multi-layer
-                            decision intelligence.</p>
-                    </div>
-                    <div class="item-card">
-                        <div class="item-meta">02 / Recon + Scan</div>
-                        <h3><a href="https://github.com/Coff0xc/Github-API-scan" target="_blank"
-                                data-i18n="projects.api_scan">Github-API-scan</a></h3>
-                        <p data-i18n="projects.api_scan_desc">GitHub leaked key scanner with async TUI validation.</p>
-                    </div>
-                    <div class="item-card">
-                        <div class="item-meta">03 / Red Tooling</div>
-                        <h3><a href="https://github.com/Coff0xc/Hexstrike-ai-6.2" target="_blank"
-                                data-i18n="projects.hexstrike">Hexstrike-ai-6.2</a></h3>
-                        <p data-i18n="projects.hexstrike_desc">High-performance custom AI orchestration for red teaming
-                            operations.</p>
-                    </div>
-                    <div class="item-card">
-                        <div class="item-meta">04 / Research</div>
-                        <h3><a href="https://github.com/Coff0xc/LLM-Security-Assessment-Framework" target="_blank"
-                                data-i18n="projects.llm_sec">LLM-Security-Framework</a></h3>
-                        <p data-i18n="projects.llm_sec_desc">Framework for evaluating Large Language Model security and
-                            adversarial resilience.</p>
-                    </div>
-                </div>
-            </section>
+                    <section id="projects">
+                        <h2 data-i18n="projects.title">Select Projects</h2>
+                        <div class="grid">
+                            <div class="item-card">
+                                <div class="item-meta" data-i18n="projects_meta.meta1">01 / Agentic Offensive</div>
+                                <h3><a href="https://github.com/Coff0xc/AutoRedTeam-Orchestrator" target="_blank" rel="noopener"
+                                        data-i18n="projects.orchestrator">AutoRedTeam-Orch</a></h3>
+                                <p data-i18n="projects.orchestrator_desc">Autonomous agent for offensive security. Multi-layer
+                                    decision intelligence.</p>
+                            </div>
+                            <div class="item-card">
+                                <div class="item-meta" data-i18n="projects_meta.meta2">02 / Recon + Scan</div>
+                                <h3><a href="https://github.com/Coff0xc/Github-API-scan" target="_blank" rel="noopener"
+                                        data-i18n="projects.api_scan">Github-API-scan</a></h3>
+                                <p data-i18n="projects.api_scan_desc">GitHub leaked key scanner with async TUI validation.</p>
+                            </div>
+                            <div class="item-card">
+                                <div class="item-meta" data-i18n="projects_meta.meta3">03 / Red Tooling</div>
+                                <h3><a href="https://github.com/Coff0xc/Hexstrike-ai-6.2" target="_blank" rel="noopener"
+                                        data-i18n="projects.hexstrike">Hexstrike-ai-6.2</a></h3>
+                                <p data-i18n="projects.hexstrike_desc">High-performance custom AI orchestration for red teaming
+                                    operations.</p>
+                            </div>
+                            <div class="item-card">
+                                <div class="item-meta" data-i18n="projects_meta.meta4">04 / Research</div>
+                                <h3><a href="https://github.com/Coff0xc/LLM-Security-Assessment-Framework" target="_blank" rel="noopener"
+                                        data-i18n="projects.llm_sec">LLM-Security-Framework</a></h3>
+                                <p data-i18n="projects.llm_sec_desc">Framework for evaluating Large Language Model security and
+                                    adversarial resilience.</p>
+                            </div>
+                        </div>
+                    </section>
 
-            <section id="okr">
-                <h2 data-i18n="okr.title">2026 Progression</h2>
-                <div id="okr-container">
-                    <!-- Progress lines rendered via JS -->
-                </div>
-            </section>
+                    <section id="okr">
+                        <h2 data-i18n="okr.title">2026 Progression</h2>
+                        <div id="okr-container">
+                            <!-- Progress lines rendered via JS -->
+                        </div>
+                    </section>
 
-            <section id="about">
-                <h2 data-i18n="about.title">Information</h2>
-                <div class="about-grid">
-                    <div class="about-text" data-i18n="about.intro">
-                        Bridging binary logic and cognitive safety. Focus on high-frequency threat mitigation and kernel
-                        internals.
-                    </div>
-                    <div class="details-grid">
-                        <div class="info-box">
-                            <h4 data-i18n="about.roles">Experience</h4>
-                            <ul data-i18n="about.roles_list">
-                                <li>360 / L2 Security Analyst</li>
-                                <li>QiAnXin / Security Service</li>
-                                <li>IC Design Student</li>
-                            </ul>
+                    <section id="about">
+                        <h2 data-i18n="about.title">Information</h2>
+                        <div class="about-grid">
+                            <div class="about-text" data-i18n="about.intro">
+                                Bridging binary logic and cognitive safety. Focus on high-frequency threat mitigation and kernel
+                                internals.
+                            </div>
+                            <div class="details-grid">
+                                <div class="info-box">
+                                    <h4 data-i18n="about.roles">Experience</h4>
+                                    <ul data-i18n="about.roles_list">
+                                        <li>360 / L2 Security Analyst</li>
+                                        <li>QiAnXin / Security Service</li>
+                                        <li>IC Design Student</li>
+                                    </ul>
+                                </div>
+                                <div class="info-box">
+                                    <h4 data-i18n="about.techStack">Core Stack</h4>
+                                    <p>C, C++, Go, Python, Assembly</p>
+                                </div>
+                                <div class="info-box">
+                                    <h4 data-i18n="about.interests">Focus</h4>
+                                    <p data-i18n="about.interests_desc">Red Team Automation, LLM Security, Kernel Internals</p>
+                                </div>
+                                <div class="info-box">
+                                    <h4 data-i18n="about.contact">Reach</h4>
+                                    <p><a href="mailto:Coff0xc@protonmail.com">Coff0xc@protonmail.com</a></p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="info-box">
-                            <h4 data-i18n="about.techStack">Core Stack</h4>
-                            <p>C, C++, Go, Python, Assembly</p>
-                        </div>
-                        <div class="info-box">
-                            <h4 data-i18n="about.interests">Focus</h4>
-                            <p data-i18n="about.interests_desc">Red Team Automation, LLM Security, Kernel Internals</p>
-                        </div>
-                        <div class="info-box">
-                            <h4 data-i18n="about.contact">Reach</h4>
-                            <p><a href="mailto:Coff0xc@protonmail.com">Coff0xc@protonmail.com</a></p>
-                        </div>
-                    </div>
+                    </section>
                 </div>
-            </section>
+
+                <aside class="sidebar-right" role="complementary" aria-label="Quick information">
+                    <div class="sidebar-sticky">
+                        <!-- Quick Stats -->
+                        <div class="stats-card">
+                            <h3 data-i18n="sidebar.stats">Quick Stats</h3>
+                            <div class="quick-stats">
+                                <div class="stat-item">
+                                    <span class="stat-value" id="stat-repos">--</span>
+                                    <span class="stat-label" data-i18n="sidebar.repos">Repos</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-value" id="stat-followers">--</span>
+                                    <span class="stat-label" data-i18n="sidebar.followers">Followers</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-value" id="stat-stars">--</span>
+                                    <span class="stat-label" data-i18n="sidebar.stars">Stars</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tech Stack -->
+                        <div class="stats-card">
+                            <h3 data-i18n="sidebar.techStack">Tech Stack</h3>
+                            <div class="tech-tags">
+                                <span class="tag">Python</span>
+                                <span class="tag">Go</span>
+                                <span class="tag">C/C++</span>
+                                <span class="tag">Assembly</span>
+                                <span class="tag">Rust</span>
+                            </div>
+                        </div>
+
+                        <!-- Focus Areas -->
+                        <div class="stats-card">
+                            <h3 data-i18n="sidebar.focus">Focus</h3>
+                            <div class="focus-list">
+                                <div class="focus-item">
+                                    <span class="focus-icon">⚔</span>
+                                    <span data-i18n="sidebar.focus1">Red Team Automation</span>
+                                </div>
+                                <div class="focus-item">
+                                    <span class="focus-icon">🤖</span>
+                                    <span data-i18n="sidebar.focus2">LLM Security</span>
+                                </div>
+                                <div class="focus-item">
+                                    <span class="focus-icon">⚙</span>
+                                    <span data-i18n="sidebar.focus3">Kernel Internals</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Links -->
+                        <div class="stats-card">
+                            <h3 data-i18n="sidebar.links">Links</h3>
+                            <div class="social-links">
+                                <a href="https://github.com/Coff0xc" target="_blank" rel="noopener" class="social-link">
+                                    <span>GitHub</span>
+                                    <span>→</span>
+                                </a>
+                                <a href="mailto:Coff0xc@protonmail.com" class="social-link">
+                                    <span>Email</span>
+                                    <span>→</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
         </main>
     </div>
     <script src="script.js"></script>
