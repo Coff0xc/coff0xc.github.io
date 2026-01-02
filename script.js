@@ -1,20 +1,50 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // i18n
     let currentLang = localStorage.getItem('lang') || 'en';
     let i18nData = {};
 
-    fetch('i18n.json')
-        .then(res => res.json())
-        .then(data => {
-            i18nData = data;
-            updateLanguage(currentLang);
-        });
+    // Load i18n and OKR data
+    Promise.all([
+        fetch('i18n.json').then(res => res.json()),
+        fetch('okr-2026.json').then(res => res.json())
+    ]).then(([i18n, okrData]) => {
+        i18nData = i18n;
+        loadOKR(okrData);
+        updateLanguage(currentLang);
+    });
 
     document.getElementById('lang-toggle').addEventListener('click', () => {
         currentLang = currentLang === 'en' ? 'zh' : 'en';
         localStorage.setItem('lang', currentLang);
         updateLanguage(currentLang);
     });
+
+    function loadOKR(data) {
+        const container = document.getElementById('okr-container');
+        Object.entries(data.goals).forEach(([key, goal]) => {
+            const card = document.createElement('div');
+            card.className = 'okr-card';
+            card.dataset.goalKey = key;
+            let metricsHTML = '';
+            Object.entries(goal.metrics).forEach(([metricKey, metric]) => {
+                const progress = typeof metric.target === 'number' ?
+                    Math.min((metric.current / metric.target) * 100, 100) : 0;
+                const displayTarget = typeof metric.target === 'number' ?
+                    metric.target.toLocaleString() : metric.target;
+                const displayCurrent = typeof metric.current === 'number' ?
+                    metric.current.toLocaleString() : metric.current;
+                metricsHTML += `
+                    <div class="okr-metric">
+                        <div class="okr-metric-label">${metricKey.toUpperCase()}</div>
+                        <div class="okr-progress-bar">
+                            <div class="okr-progress-fill" style="width: ${progress}%"></div>
+                            <div class="okr-progress-text">${displayCurrent} / ${displayTarget}</div>
+                        </div>
+                    </div>`;
+            });
+            card.innerHTML = `<h3></h3>${metricsHTML}`;
+            container.appendChild(card);
+        });
+    }
 
     function updateLanguage(lang) {
         document.getElementById('lang-toggle').textContent = lang === 'en' ? '中文' : 'EN';
@@ -27,45 +57,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Update OKR titles
-        const okrTitles = {
-            zh: { openSource: '开源贡献', bugBounty: '漏洞实战', engineering: '工程规模', research: '学术复现' },
-            en: { openSource: 'Open Source', bugBounty: 'Bug Bounty', engineering: 'Engineering', research: 'Research' }
-        };
-        document.querySelectorAll('.okr-card h3').forEach((el, i) => {
-            const keys = ['openSource', 'bugBounty', 'engineering', 'research'];
-            el.textContent = okrTitles[lang][keys[i]];
+        document.querySelectorAll('.okr-card').forEach(card => {
+            const key = card.dataset.goalKey;
+            const h3 = card.querySelector('h3');
+            if (h3 && i18nData[lang]?.okr?.[key]) {
+                h3.textContent = i18nData[lang].okr[key];
+            }
         });
     }
-
-    // Load OKR Data
-    fetch('okr-2026.json')
-        .then(res => res.json())
-        .then(data => {
-            const container = document.getElementById('okr-container');
-            Object.entries(data.goals).forEach(([key, goal]) => {
-                const card = document.createElement('div');
-                card.className = 'okr-card';
-                let metricsHTML = '';
-                Object.entries(goal.metrics).forEach(([metricKey, metric]) => {
-                    const progress = typeof metric.target === 'number' ?
-                        Math.min((metric.current / metric.target) * 100, 100) : 0;
-                    const displayTarget = typeof metric.target === 'number' ?
-                        metric.target.toLocaleString() : metric.target;
-                    const displayCurrent = typeof metric.current === 'number' ?
-                        metric.current.toLocaleString() : metric.current;
-                    metricsHTML += `
-                        <div class="okr-metric">
-                            <div class="okr-metric-label">${metricKey.toUpperCase()}</div>
-                            <div class="okr-progress-bar">
-                                <div class="okr-progress-fill" style="width: ${progress}%"></div>
-                                <div class="okr-progress-text">${displayCurrent} / ${displayTarget}</div>
-                            </div>
-                        </div>`;
-                });
-                card.innerHTML = `<h3>${goal.title}</h3>${metricsHTML}`;
-                container.appendChild(card);
-            });
-        });
 
     // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
