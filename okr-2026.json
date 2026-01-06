@@ -7,7 +7,7 @@
       "metrics": {
         "contributions": {
           "target": 2700,
-          "current": 39
+          "current": 38
         },
         "pr": {
           "target": 50,
@@ -29,7 +29,7 @@
       "metrics": {
         "loc": {
           "target": 1800000,
-          "current": 44075
+          "current": 44093
         }
       }
     },
@@ -48,8 +48,8 @@
     }
   },
   "stats": {
-    "repos": 6,
-    "followers": 10,
-    "stars": 67
+    "repos": 5,
+    "followers": 11,
+    "stars": 66
   }
 }
