@@ -24,11 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load data
     Promise.all([
         fetch('i18n.json').then(res => res.json()),
-        fetch('okr-2026.json').then(res => res.json())
-    ]).then(([i18n, okr]) => {
+        fetch('okr-2026.json').then(res => res.json()),
+        fetch('projects.json').then(res => res.json()).catch(() => null)
+    ]).then(([i18n, okr, projects]) => {
         i18nData = i18n;
         okrData = okr;
         loadOKR(okrData);
+        if (projects) loadProjects(projects.projects);
         updateLanguage(currentLang);
         updateThemeButton();
         typeTerminal();
@@ -119,6 +121,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 container.appendChild(row);
             });
+        });
+    }
+
+    function loadProjects(projects) {
+        const container = document.getElementById('projects-container');
+        if (!container || !projects) return;
+
+        container.innerHTML = '';
+        projects.forEach((project, index) => {
+            // 跳过测试仓库
+            if (project.name.toLowerCase().includes('test') || project.stars === 0 && !project.description) {
+                return;
+            }
+
+            const card = document.createElement('div');
+            card.className = 'item-card';
+
+            const metaNum = String(index + 1).padStart(2, '0');
+            const metaText = project.language !== 'Unknown' ? project.language : 'Project';
+
+            card.innerHTML = `
+                <div class="item-meta">${metaNum} / ${metaText}</div>
+                <h3><a href="${project.url}" target="_blank" rel="noopener">${project.name}</a></h3>
+                <p>${project.description || 'No description available.'}</p>
+                ${project.stars > 0 ? `<span class="project-stars">★ ${project.stars}</span>` : ''}
+            `;
+            container.appendChild(card);
         });
     }
 
