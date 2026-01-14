@@ -4,6 +4,7 @@
       "home": "首页",
       "projects": "项目",
       "okr": "进展",
+      "blog": "博客",
       "about": "关于"
     },
     "home": {
@@ -91,6 +92,7 @@
       "home": "Home",
       "projects": "Projects",
       "okr": "Goals",
+      "blog": "Blog",
       "about": "About"
     },
     "home": {

@@ -1,0 +1,15 @@
+{
+  "lastUpdate": "2026-01-15",
+  "posts": [
+    {
+      "id": "hello-world",
+      "title": "Hello World - 博客系统上线",
+      "title_en": "Hello World - Blog System Online",
+      "date": "2026-01-15",
+      "tags": ["announcement"],
+      "summary": "个人博客系统正式上线，记录安全研究和技术分享。",
+      "summary_en": "Personal blog system is now online, documenting security research and tech sharing.",
+      "content": "posts/hello-world.md"
+    }
+  ]
+}
