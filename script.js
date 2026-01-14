@@ -1,14 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 系统主题检测
+    // ==================== 常量配置 ====================
+    const VALID_LANGS = ['zh', 'en'];
+    const VALID_THEMES = ['light', 'dark'];
+    const TERMINAL_LINE_DELAY = 150;
+    const TERMINAL_RESET_DELAY = 300;
+
+    // ==================== 状态管理 ====================
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const browserLang = navigator.language.startsWith('zh') ? 'zh' : 'en';
 
-    let currentLang = localStorage.getItem('lang') || browserLang;
-    let currentTheme = localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light');
+    // 安全的 localStorage 读取（带验证）
+    let currentLang = localStorage.getItem('lang');
+    if (!VALID_LANGS.includes(currentLang)) currentLang = browserLang;
+
+    let currentTheme = localStorage.getItem('theme');
+    if (!VALID_THEMES.includes(currentTheme)) currentTheme = prefersDark ? 'dark' : 'light';
+
     let i18nData = {};
     let okrData = null;
 
-    // Apply saved theme
+    // ==================== 初始化主题 ====================
     if (currentTheme === 'light') {
         document.documentElement.setAttribute('data-theme', 'light');
     }
@@ -21,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Load data
+    // ==================== 数据加载（单次请求） ====================
     Promise.all([
         fetch('i18n.json').then(res => res.json()),
         fetch('okr-2026.json').then(res => res.json()),
@@ -29,18 +40,22 @@ document.addEventListener('DOMContentLoaded', () => {
     ]).then(([i18n, okr, projects]) => {
         i18nData = i18n;
         okrData = okr;
+
+        // 使用缓存的 okrData 更新 GitHub Stats（移除重复请求）
+        updateGitHubStats(okrData);
+
         loadOKR(okrData);
         if (projects) loadProjects(projects.projects);
         updateLanguage(currentLang);
         updateThemeButton();
         typeTerminal();
         updateSEO();
+    }).catch(err => {
+        console.error('Failed to load data:', err);
     });
 
-    // Language toggle
+    // ==================== 事件绑定 ====================
     document.getElementById('lang-toggle').addEventListener('click', toggleLanguage);
-
-    // Theme toggle
     document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
 
     // 键盘快捷键
@@ -50,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key.toLowerCase() === 't') toggleTheme();
     });
 
+    // ==================== 语言切换 ====================
     function toggleLanguage() {
         currentLang = currentLang === 'en' ? 'zh' : 'en';
         localStorage.setItem('lang', currentLang);
@@ -59,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateSEO();
     }
 
+    // ==================== 主题切换 ====================
     function toggleTheme() {
         currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
         localStorage.setItem('theme', currentTheme);
@@ -82,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.textContent = themeText || (currentTheme === 'dark' ? '☀ Light' : '☾ Dark');
     }
 
+    // ==================== SEO 更新 ====================
     function updateSEO() {
         const seo = i18nData[currentLang]?.seo;
         if (seo) {
@@ -92,6 +110,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // ==================== GitHub Stats（使用缓存数据） ====================
+    function updateGitHubStats(data) {
+        const statRepos = document.getElementById('stat-repos');
+        const statFollowers = document.getElementById('stat-followers');
+        const statStars = document.getElementById('stat-stars');
+
+        if (data?.stats) {
+            statRepos.textContent = data.stats.repos || 0;
+            statFollowers.textContent = data.stats.followers || 0;
+            statStars.textContent = data.stats.stars || 0;
+        } else {
+            statRepos.textContent = '?';
+            statFollowers.textContent = '?';
+            statStars.textContent = '?';
+        }
+    }
+
+    // ==================== OKR 加载（安全 DOM 构建） ====================
     function loadOKR(data) {
         const container = document.getElementById('okr-container');
         if (!container) return;
@@ -105,51 +141,101 @@ document.addEventListener('DOMContentLoaded', () => {
             container.appendChild(goalHeader);
 
             Object.entries(goal.metrics).forEach(([metricKey, metric]) => {
-                const progress = Math.min((metric.current / metric.target) * 100, 100);
+                // 安全检查：避免除以零
+                const progress = metric.target > 0
+                    ? Math.min((metric.current / metric.target) * 100, 100)
+                    : 0;
                 const metricLabel = i18nData[currentLang]?.okr?.metrics?.[metricKey] || metricKey.toUpperCase();
 
+                // 使用安全的 DOM 方法构建（避免 innerHTML XSS）
                 const row = document.createElement('div');
                 row.className = 'okr-row';
-                row.innerHTML = `
-                    <div class="okr-info">
-                        <span>${metricLabel}</span>
-                        <span>${metric.current.toLocaleString()} / ${metric.target.toLocaleString()} <span class="okr-percent">(${Math.round(progress)}%)</span></span>
-                    </div>
-                    <div class="okr-bar-bg">
-                        <div class="okr-bar-fill" style="width: ${progress}%"></div>
-                    </div>
-                `;
+
+                const info = document.createElement('div');
+                info.className = 'okr-info';
+
+                const labelSpan = document.createElement('span');
+                labelSpan.textContent = metricLabel;
+
+                const valueSpan = document.createElement('span');
+                valueSpan.textContent = `${metric.current.toLocaleString()} / ${metric.target.toLocaleString()} `;
+                const percentSpan = document.createElement('span');
+                percentSpan.className = 'okr-percent';
+                percentSpan.textContent = `(${Math.round(progress)}%)`;
+                valueSpan.appendChild(percentSpan);
+
+                info.appendChild(labelSpan);
+                info.appendChild(valueSpan);
+
+                const barBg = document.createElement('div');
+                barBg.className = 'okr-bar-bg';
+                const barFill = document.createElement('div');
+                barFill.className = 'okr-bar-fill';
+                barFill.style.width = `${progress}%`;
+                barBg.appendChild(barFill);
+
+                row.appendChild(info);
+                row.appendChild(barBg);
                 container.appendChild(row);
             });
         });
     }
 
+    // ==================== 项目加载（安全 DOM 构建） ====================
     function loadProjects(projects) {
         const container = document.getElementById('projects-container');
         if (!container || !projects) return;
 
         container.innerHTML = '';
-        projects.forEach((project, index) => {
+        let displayIndex = 0;
+
+        projects.forEach((project) => {
             // 跳过测试仓库
-            if (project.name.toLowerCase().includes('test') || project.stars === 0 && !project.description) {
+            if (project.name.toLowerCase().includes('test') || (project.stars === 0 && !project.description)) {
                 return;
             }
 
+            displayIndex++;
             const card = document.createElement('div');
             card.className = 'item-card';
 
-            const metaNum = String(index + 1).padStart(2, '0');
+            const metaNum = String(displayIndex).padStart(2, '0');
             const metaText = project.language !== 'Unknown' ? project.language : 'Project';
 
-            card.innerHTML = `
-                <div class="item-meta">${metaNum} / ${metaText}</div>
-                <h3><a href="${project.url}" target="_blank" rel="noopener">${project.name}</a></h3>
-                <p>${project.description || 'No description available.'}</p>
-                ${project.stars > 0 ? `<span class="project-stars">★ ${project.stars}</span>` : ''}
-            `;
+            // 使用安全的 DOM 方法构建
+            const meta = document.createElement('div');
+            meta.className = 'item-meta';
+            meta.textContent = `${metaNum} / ${metaText}`;
+
+            const h3 = document.createElement('h3');
+            const link = document.createElement('a');
+            link.href = project.url;
+            link.target = '_blank';
+            link.rel = 'noopener';
+            link.textContent = project.name;
+            h3.appendChild(link);
+
+            const desc = document.createElement('p');
+            desc.textContent = project.description || 'No description available.';
+
+            card.appendChild(meta);
+            card.appendChild(h3);
+            card.appendChild(desc);
+
+            if (project.stars > 0) {
+                const stars = document.createElement('span');
+                stars.className = 'project-stars';
+                stars.textContent = `★ ${project.stars}`;
+                card.appendChild(stars);
+            }
+
             container.appendChild(card);
         });
     }
+
+    // ==================== 国际化更新 ====================
+    // 允许 HTML 的 i18n 键（白名单）
+    const HTML_ALLOWED_KEYS = ['about.roles_list', 'about.intro'];
 
     function updateLanguage(lang) {
         document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
@@ -159,14 +245,22 @@ document.addEventListener('DOMContentLoaded', () => {
             const keys = key.split('.');
             let value = i18nData[lang];
             keys.forEach(k => value = value?.[k]);
-            if (value) el.innerHTML = value;
+
+            if (value) {
+                // 安全处理：仅白名单键允许 HTML
+                if (HTML_ALLOWED_KEYS.includes(key)) {
+                    el.innerHTML = value;
+                } else {
+                    el.textContent = value;
+                }
+            }
         });
 
         updateThemeButton();
         updateActiveNav();
     }
 
-    // 滚动导航高亮 (Intersection Observer)
+    // ==================== 滚动导航高亮 ====================
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('nav a');
 
@@ -189,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
         navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === hash));
     }
 
-    // Terminal
+    // ==================== 终端效果 ====================
     const terminalOutput = document.getElementById('terminal-output');
     let lineIdx = 0;
     let terminalTimeout = null;
@@ -212,12 +306,17 @@ document.addEventListener('DOMContentLoaded', () => {
             p.textContent = bootLines[lineIdx];
             terminalOutput.appendChild(p);
             lineIdx++;
-            terminalTimeout = setTimeout(typeTerminal, 150);
+            terminalTimeout = setTimeout(typeTerminal, TERMINAL_LINE_DELAY);
         } else {
             const prompt = i18nData[currentLang]?.terminal?.prompt || 'root@coff0xc:~$';
             const p = document.createElement('div');
             p.className = 'terminal-line cmd';
-            p.innerHTML = `${prompt} <span class="cursor"></span>`;
+            // 安全构建 prompt
+            const promptText = document.createTextNode(prompt + ' ');
+            const cursor = document.createElement('span');
+            cursor.className = 'cursor';
+            p.appendChild(promptText);
+            p.appendChild(cursor);
             terminalOutput.appendChild(p);
         }
     }
@@ -226,10 +325,10 @@ document.addEventListener('DOMContentLoaded', () => {
         clearTimeout(terminalTimeout);
         terminalOutput.innerHTML = '';
         lineIdx = 0;
-        setTimeout(typeTerminal, 300);
+        setTimeout(typeTerminal, TERMINAL_RESET_DELAY);
     }
 
-    // 返回顶部按钮
+    // ==================== 返回顶部 ====================
     const backToTop = document.getElementById('back-to-top');
     window.addEventListener('scroll', () => {
         backToTop.classList.toggle('visible', window.scrollY > 300);
@@ -240,24 +339,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Nav switch
     window.addEventListener('hashchange', updateActiveNav);
-
-    // GitHub Stats - 从 OKR JSON 读取，避免 API 限流
-    const statRepos = document.getElementById('stat-repos');
-    const statFollowers = document.getElementById('stat-followers');
-    const statStars = document.getElementById('stat-stars');
-
-    fetch('okr-2026.json')
-        .then(res => res.json())
-        .then(data => {
-            if (data.stats) {
-                statRepos.textContent = data.stats.repos || 0;
-                statFollowers.textContent = data.stats.followers || 0;
-                statStars.textContent = data.stats.stars || 0;
-            }
-        })
-        .catch(() => {
-            statRepos.textContent = '?';
-            statFollowers.textContent = '?';
-            statStars.textContent = '?';
-        });
 });
