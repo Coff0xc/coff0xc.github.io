@@ -22,7 +22,7 @@ jobs:
 
       - name: Sync GitHub Stats
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
         run: python sync_okr.py
 
       - name: Commit changes
