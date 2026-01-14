@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-01-15",
+  "lastUpdate": "2026-01-14",
   "projects": [
     {
       "name": "AutoRedTeam-Orchestrator",
@@ -34,28 +34,12 @@
       "updatedAt": "2026-01-14T15:59:57Z"
     },
     {
-      "name": "Coff0xc-2026",
-      "description": "test",
-      "url": "https://github.com/Coff0xc/Coff0xc-2026",
-      "stars": 0,
-      "language": "Unknown",
-      "updatedAt": "2026-01-14T16:15:58Z"
-    },
-    {
       "name": "CTF-MCP",
       "description": "MCP Server for CTF challenges - 126 tools for Web/Crypto/Pwn | CTF 挑战 MCP 服务器 - Web/密码学/二进制利用工具集",
       "url": "https://github.com/Coff0xc/CTF-MCP",
       "stars": 0,
       "language": "Python",
       "updatedAt": "2026-01-11T16:54:52Z"
-    },
-    {
-      "name": "personal-test",
-      "description": "greengroud",
-      "url": "https://github.com/Coff0xc/personal-test",
-      "stars": 0,
-      "language": "Unknown",
-      "updatedAt": "2026-01-06T17:39:28Z"
     }
   ]
 }
