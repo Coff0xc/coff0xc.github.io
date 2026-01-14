@@ -13,6 +13,7 @@ from pathlib import Path
 GITHUB_USERNAME = "Coff0xc"
 YEAR = 2026
 OKR_FILE = Path(__file__).parent / "okr-2026.json"
+PROJECTS_FILE = Path(__file__).parent / "projects.json"
 GH_PATH = r"E:\Applocation\githubcli\gh.exe"
 
 def get_gh_cmd():
@@ -87,6 +88,39 @@ def get_github_loc():
         return None
     return total_loc if total_loc > 0 else None
 
+def get_github_projects():
+    """获取 GitHub 仓库列表作为项目数据"""
+    gh = get_gh_cmd()
+    try:
+        result = subprocess.run([
+            gh, 'repo', 'list', GITHUB_USERNAME,
+            '--json', 'name,description,url,stargazerCount,primaryLanguage,updatedAt',
+            '--limit', '100'
+        ], capture_output=True, text=True, encoding='utf-8', errors='replace')
+        if result.returncode != 0:
+            return None
+        repos = json.loads(result.stdout)
+        # 过滤掉 .github.io 页面仓库，按星标和更新时间排序
+        projects = []
+        for repo in repos:
+            if '.github.io' in repo['name']:
+                continue
+            lang = repo.get('primaryLanguage') or {}
+            projects.append({
+                'name': repo['name'],
+                'description': repo.get('description') or '',
+                'url': repo['url'],
+                'stars': repo.get('stargazerCount', 0),
+                'language': lang.get('name', 'Unknown'),
+                'updatedAt': repo.get('updatedAt', '')
+            })
+        # 按星标数降序排序
+        projects.sort(key=lambda x: x['stars'], reverse=True)
+        return projects
+    except Exception as e:
+        print(f"[WARN] 获取项目列表失败: {e}")
+    return None
+
 def update_okr():
     with open(OKR_FILE, 'r', encoding='utf-8') as f:
         okr = json.load(f)
@@ -118,7 +152,22 @@ def update_okr():
     
     print(f"\n[DONE] OKR 数据已更新至 {OKR_FILE}")
 
+def sync_projects():
+    """同步项目数据到 projects.json"""
+    projects = get_github_projects()
+    if projects:
+        with open(PROJECTS_FILE, 'w', encoding='utf-8') as f:
+            json.dump({
+                'lastUpdate': datetime.now().strftime('%Y-%m-%d'),
+                'projects': projects
+            }, f, indent=2, ensure_ascii=False)
+        print(f"[SYNC] Projects: {len(projects)} 个仓库")
+        print(f"[DONE] 项目数据已更新至 {PROJECTS_FILE}")
+    else:
+        print("[WARN] 无法获取项目数据")
+
 if __name__ == '__main__':
     if sys.platform == 'win32':
         sys.stdout.reconfigure(encoding='utf-8')
     update_okr()
+    sync_projects()
