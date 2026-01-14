@@ -1,13 +1,13 @@
 {
   "year": 2026,
-  "lastUpdate": "2026-01-15",
+  "lastUpdate": "2026-01-14",
   "goals": {
     "openSource": {
       "title": "开源贡献",
       "metrics": {
         "contributions": {
           "target": 2700,
-          "current": 63
+          "current": 64
         },
         "pr": {
           "target": 50,
@@ -29,7 +29,7 @@
       "metrics": {
         "loc": {
           "target": 1800000,
-          "current": 127761
+          "current": 127955
         }
       }
     },
