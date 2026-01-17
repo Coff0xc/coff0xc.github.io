@@ -13,9 +13,9 @@
       "name": "Github-API-scan",
       "description": "GitHub 泄露的 API 密钥扫描器。支持 OpenAI/Claude/Gemini/Azure。异步验证 + GPT-4 探测 + 余额检测。丰富的 TUI 控制面板。",
       "url": "https://github.com/Coff0xc/Github-API-scan",
-      "stars": 20,
+      "stars": 21,
       "language": "Python",
-      "updatedAt": "2026-01-12T04:27:28Z"
+      "updatedAt": "2026-01-17T11:57:57Z"
     },
     {
       "name": "Hexstrike-ai-6.2",
@@ -34,20 +34,20 @@
       "updatedAt": "2026-01-16T14:06:30Z"
     },
     {
+      "name": "CTF-MCP",
+      "description": "MCP Server for CTF challenges - 126 tools for Web/Crypto/Pwn | CTF 挑战 MCP 服务器 - Web/密码学/二进制利用工具集",
+      "url": "https://github.com/Coff0xc/CTF-MCP",
+      "stars": 1,
+      "language": "Python",
+      "updatedAt": "2026-01-17T11:59:53Z"
+    },
+    {
       "name": "Coff0xc-2026",
       "description": "test",
       "url": "https://github.com/Coff0xc/Coff0xc-2026",
       "stars": 0,
       "language": "Unknown",
       "updatedAt": "2026-01-14T16:15:58Z"
-    },
-    {
-      "name": "CTF-MCP",
-      "description": "MCP Server for CTF challenges - 126 tools for Web/Crypto/Pwn | CTF 挑战 MCP 服务器 - Web/密码学/二进制利用工具集",
-      "url": "https://github.com/Coff0xc/CTF-MCP",
-      "stars": 0,
-      "language": "Python",
-      "updatedAt": "2026-01-11T16:54:52Z"
     },
     {
       "name": "personal-test",
