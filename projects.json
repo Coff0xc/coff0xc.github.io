@@ -5,9 +5,9 @@
       "name": "AutoRedTeam-Orchestrator",
       "description": "AI驱动的自动化红队编排框架 | AI-Driven Automated Red Team Orchestration Framework | 74 MCP Tools | 2000+ Payloads | Full ATT&CK Coverage | Cross-platform (Linux/Windows/macOS)",
       "url": "https://github.com/Coff0xc/AutoRedTeam-Orchestrator",
-      "stars": 48,
+      "stars": 52,
       "language": "Python",
-      "updatedAt": "2026-01-26T06:16:22Z"
+      "updatedAt": "2026-01-26T08:59:32Z"
     },
     {
       "name": "Github-API-scan",
@@ -37,9 +37,9 @@
       "name": "CTF-MCP",
       "description": "MCP Server for CTF challenges - 126 tools for Web/Crypto/Pwn | CTF 挑战 MCP 服务器 - Web/密码学/二进制利用工具集",
       "url": "https://github.com/Coff0xc/CTF-MCP",
-      "stars": 3,
+      "stars": 4,
       "language": "Python",
-      "updatedAt": "2026-01-26T08:07:27Z"
+      "updatedAt": "2026-01-26T09:00:45Z"
     },
     {
       "name": "Coff0xc-2026",
