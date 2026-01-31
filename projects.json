@@ -5,9 +5,9 @@
       "name": "AutoRedTeam-Orchestrator",
       "description": "AI驱动的自动化红队编排框架 | AI-Driven Automated Red Team Orchestration Framework | 74 MCP Tools | 2000+ Payloads | Full ATT&CK Coverage | Cross-platform (Linux/Windows/macOS)",
       "url": "https://github.com/Coff0xc/AutoRedTeam-Orchestrator",
-      "stars": 64,
+      "stars": 65,
       "language": "Python",
-      "updatedAt": "2026-01-30T16:47:57Z"
+      "updatedAt": "2026-01-31T08:23:11Z"
     },
     {
       "name": "Github-API-scan",
