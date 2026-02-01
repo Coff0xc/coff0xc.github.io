@@ -7,7 +7,7 @@
       "metrics": {
         "contributions": {
           "target": 2700,
-          "current": 101
+          "current": 102
         },
         "pr": {
           "target": 50,
