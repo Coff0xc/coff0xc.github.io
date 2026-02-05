@@ -7,7 +7,7 @@
       "metrics": {
         "contributions": {
           "target": 2700,
-          "current": 106
+          "current": 107
         },
         "pr": {
           "target": 50,
@@ -50,6 +50,6 @@
   "stats": {
     "repos": 6,
     "followers": 24,
-    "stars": 137
+    "stars": 160
   }
 }
