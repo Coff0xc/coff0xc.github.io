@@ -29,7 +29,7 @@
       "metrics": {
         "loc": {
           "target": 1800000,
-          "current": 256649
+          "current": 256648
         }
       }
     },
