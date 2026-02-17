@@ -42,6 +42,22 @@
       "updatedAt": "2026-02-05T15:16:31Z"
     },
     {
+      "name": "oh-pi",
+      "description": "One-click setup for pi-coding-agent with ant colony swarm. Like oh-my-zsh for pi.",
+      "url": "https://github.com/Coff0xc/oh-pi",
+      "stars": 0,
+      "language": "TypeScript",
+      "updatedAt": "2026-02-17T13:55:41Z"
+    },
+    {
+      "name": "kooix-cut",
+      "description": "✂️ 智能视频剪辑预处理工具 | 自动合并视频并删除静音片段 | Rust + Tauri 2.0 液态玻璃 GUI",
+      "url": "https://github.com/Coff0xc/kooix-cut",
+      "stars": 0,
+      "language": "Rust",
+      "updatedAt": "2026-02-17T13:18:21Z"
+    },
+    {
       "name": "Coff0xc-2026",
       "description": "test",
       "url": "https://github.com/Coff0xc/Coff0xc-2026",
