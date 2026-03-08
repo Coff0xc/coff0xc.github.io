@@ -37,9 +37,9 @@
       "name": "CTF-MCP",
       "description": "MCP Server for CTF challenges - 126 tools for Web/Crypto/Pwn | CTF 挑战 MCP 服务器 - Web/密码学/二进制利用工具集",
       "url": "https://github.com/Coff0xc/CTF-MCP",
-      "stars": 9,
+      "stars": 10,
       "language": "Python",
-      "updatedAt": "2026-03-06T17:42:14Z"
+      "updatedAt": "2026-03-08T11:39:52Z"
     },
     {
       "name": "oh-pi",
