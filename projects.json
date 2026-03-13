@@ -42,6 +42,14 @@
       "updatedAt": "2026-03-08T11:39:52Z"
     },
     {
+      "name": "BedCode-personal",
+      "description": "",
+      "url": "https://github.com/Coff0xc/BedCode-personal",
+      "stars": 0,
+      "language": "Python",
+      "updatedAt": "2026-03-13T02:01:38Z"
+    },
+    {
       "name": "oh-pi",
       "description": "One-click setup for pi-coding-agent with ant colony swarm. Like oh-my-zsh for pi.",
       "url": "https://github.com/Coff0xc/oh-pi",
