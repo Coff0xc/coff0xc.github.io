@@ -42,6 +42,14 @@
       "updatedAt": "2026-03-14T06:31:03Z"
     },
     {
+      "name": "lobster-guard",
+      "description": "OpenClaw Security Assessment Tool — 31-chain automated attack suite",
+      "url": "https://github.com/Coff0xc/lobster-guard",
+      "stars": 0,
+      "language": "Go",
+      "updatedAt": "2026-03-15T15:12:59Z"
+    },
+    {
       "name": "BedCode-personal",
       "description": "",
       "url": "https://github.com/Coff0xc/BedCode-personal",
