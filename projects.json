@@ -5,9 +5,9 @@
       "name": "AutoRedTeam-Orchestrator",
       "description": "AI-Driven Automated Red Team Orchestration Framework | AI驱动的自动化红队编排框架 | 101 MCP Tools | 2000+ Payloads | Full ATT&CK Coverage | MCTS Attack Planner | Knowledge Graph | Cross-platform",
       "url": "https://github.com/Coff0xc/AutoRedTeam-Orchestrator",
-      "stars": 183,
+      "stars": 184,
       "language": "Python",
-      "updatedAt": "2026-03-14T09:01:29Z"
+      "updatedAt": "2026-03-18T08:23:27Z"
     },
     {
       "name": "Github-API-scan",
@@ -45,9 +45,9 @@
       "name": "lobster-guard",
       "description": "OpenClaw Security Assessment Tool | OpenClaw安全评估工具 | 31 Attack Chains | 23 Nuclei Templates | Full RCE Chain | Secret Extraction | Rogue Node | Interactive Shell | Shodan/FOFA Discovery",
       "url": "https://github.com/Coff0xc/lobster-guard",
-      "stars": 8,
+      "stars": 10,
       "language": "Go",
-      "updatedAt": "2026-03-18T06:43:39Z"
+      "updatedAt": "2026-03-18T08:11:32Z"
     },
     {
       "name": "BedCode-personal",
