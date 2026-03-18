@@ -45,9 +45,9 @@
       "name": "lobster-guard",
       "description": "OpenClaw Security Assessment Tool | OpenClaw安全评估工具 | 31 Attack Chains | 23 Nuclei Templates | Full RCE Chain | Secret Extraction | Rogue Node | Interactive Shell | Shodan/FOFA Discovery",
       "url": "https://github.com/Coff0xc/lobster-guard",
-      "stars": 10,
+      "stars": 1,
       "language": "Go",
-      "updatedAt": "2026-03-18T08:11:32Z"
+      "updatedAt": "2026-03-18T09:52:02Z"
     },
     {
       "name": "BedCode-personal",
