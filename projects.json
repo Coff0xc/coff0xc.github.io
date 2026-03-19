@@ -45,9 +45,9 @@
       "name": "catchclaw",
       "description": "OpenClaw Security Assessment Tool | OpenClaw安全评估工具 | 31 Attack Chains | 23 Nuclei Templates | Full RCE Chain | Secret Extraction | Rogue Node | Interactive Shell | Shodan/FOFA Discovery",
       "url": "https://github.com/Coff0xc/catchclaw",
-      "stars": 3,
-      "language": "Go",
-      "updatedAt": "2026-03-19T12:46:56Z"
+      "stars": 10,
+      "language": "Rust",
+      "updatedAt": "2026-03-19T13:45:56Z"
     },
     {
       "name": "BedCode-personal",
