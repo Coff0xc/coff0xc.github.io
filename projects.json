@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-03-19",
+  "lastUpdate": "2026-03-20",
   "projects": [
     {
       "name": "AutoRedTeam-Orchestrator",
@@ -34,20 +34,20 @@
       "updatedAt": "2026-03-12T14:38:28Z"
     },
     {
+      "name": "catchclaw",
+      "description": "OpenClaw Security Assessment Tool | OpenClaw安全评估工具 | 31 Attack Chains | 23 Nuclei Templates | Full RCE Chain | Secret Extraction | Rogue Node | Interactive Shell | Shodan/FOFA Discovery",
+      "url": "https://github.com/Coff0xc/catchclaw",
+      "stars": 11,
+      "language": "Rust",
+      "updatedAt": "2026-03-20T00:21:28Z"
+    },
+    {
       "name": "CTF-MCP",
       "description": "MCP Server for CTF challenges - 126 tools for Web/Crypto/Pwn | CTF 挑战 MCP 服务器 - Web/密码学/二进制利用工具集",
       "url": "https://github.com/Coff0xc/CTF-MCP",
       "stars": 11,
       "language": "Python",
       "updatedAt": "2026-03-14T06:31:03Z"
-    },
-    {
-      "name": "catchclaw",
-      "description": "OpenClaw Security Assessment Tool | OpenClaw安全评估工具 | 31 Attack Chains | 23 Nuclei Templates | Full RCE Chain | Secret Extraction | Rogue Node | Interactive Shell | Shodan/FOFA Discovery",
-      "url": "https://github.com/Coff0xc/catchclaw",
-      "stars": 10,
-      "language": "Rust",
-      "updatedAt": "2026-03-19T13:45:56Z"
     },
     {
       "name": "BedCode-personal",
