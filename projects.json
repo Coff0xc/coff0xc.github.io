@@ -7,7 +7,7 @@
       "url": "https://github.com/Coff0xc/AutoRedTeam-Orchestrator",
       "stars": 187,
       "language": "Python",
-      "updatedAt": "2026-03-23T18:32:00Z"
+      "updatedAt": "2026-03-23T19:05:23Z"
     },
     {
       "name": "Github-API-scan",
@@ -23,7 +23,7 @@
       "url": "https://github.com/Coff0xc/LLM-Security-Assessment-Framework",
       "stars": 19,
       "language": "Python",
-      "updatedAt": "2026-03-20T16:22:57Z"
+      "updatedAt": "2026-03-23T19:40:31Z"
     },
     {
       "name": "Hexstrike-ai-6.2",
@@ -35,11 +35,11 @@
     },
     {
       "name": "catchclaw",
-      "description": "CatchClaw 是一款基于 Rust 的 OpenClaw / Open-WebUI AI 编程平台安全评估工具。通过 59 条 DAG 攻击链和 59 个 Exploit 模块，覆盖从初始侦察到数据泄露的完整 ATT&CK 攻击链路。  基于 Tokio 异步运行时，DAG 引擎使用 Kahn 拓扑排序按层级并发执行，Semaphore 控制并发度，支持条件执行与回退节点。攻击图可导出 Mermaid 流程图。",
+      "description": "CatchClaw 是一款基于 Rust 的 OpenClaw / Open-WebUI AI 编程平台安全评估工具。通过 72 条 DAG 攻击链和 72 个 Exploit 模块，覆盖从初始侦察到数据泄露的完整 ATT&CK 攻击链路。  基于 Tokio 异步运行时，DAG 引擎使用 Kahn 拓扑排序按层级并发执行，Semaphore 控制并发度，支持条件执行与回退节点。攻击图可导出 Mermaid 流程图。",
       "url": "https://github.com/Coff0xc/catchclaw",
       "stars": 13,
       "language": "Rust",
-      "updatedAt": "2026-03-23T18:17:38Z"
+      "updatedAt": "2026-03-23T19:37:46Z"
     },
     {
       "name": "CTF-MCP",
