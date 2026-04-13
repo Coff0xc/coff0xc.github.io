@@ -1,6 +1,6 @@
 {
   "year": 2026,
-  "lastUpdate": "2026-04-12",
+  "lastUpdate": "2026-04-13",
   "goals": {
     "openSource": {
       "title": "开源贡献",
@@ -49,7 +49,7 @@
   },
   "stats": {
     "repos": 9,
-    "followers": 39,
+    "followers": 38,
     "stars": 306
   }
 }
