@@ -29,9 +29,9 @@
       "name": "catchclaw",
       "description": "CatchClaw v5.3.0 — 多平台 AI Agent 安全评估工具，支持 OpenClaw / Dify / FastGPT / LobeChat / NextChat / AnythingLLM / Flowise / RagFlow 等 9 大平台。78 条 DAG 攻击链 | 78 个 Exploit 模块 | ATT&CK 阶段映射 | 多平台指纹识别 | Async Tokio 引擎 | 攻击图可视化",
       "url": "https://github.com/Coff0xc/catchclaw",
-      "stars": 15,
+      "stars": 16,
       "language": "Rust",
-      "updatedAt": "2026-04-06T13:42:47Z"
+      "updatedAt": "2026-04-15T12:48:05Z"
     },
     {
       "name": "Hexstrike-ai-6.2",
