@@ -5,9 +5,9 @@
       "name": "AutoRedTeam-Orchestrator",
       "description": "Enterprise AI Red Team Platform | 企业级AI红队平台 | 132 MCP Tools | Pure Python Engines | SDK+CLI+MCP | Auto-Download sqlmap/nuclei/ffuf | Production C2 | LLM Enhanced | Docker Sandbox | SARIF CI/CD | 1980 Tests",
       "url": "https://github.com/Coff0xc/AutoRedTeam-Orchestrator",
-      "stars": 208,
+      "stars": 209,
       "language": "Python",
-      "updatedAt": "2026-04-16T08:15:18Z"
+      "updatedAt": "2026-04-19T07:06:08Z"
     },
     {
       "name": "Github-API-scan",
