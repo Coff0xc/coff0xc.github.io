@@ -34,18 +34,18 @@
       "updatedAt": "2026-04-15T12:48:05Z"
     },
     {
+      "name": "CTF-MCP",
+      "description": "MCP Server for CTF challenges - 126 tools for Web/Crypto/Pwn | CTF 挑战 MCP 服务器 - Web/密码学/二进制利用工具集",
+      "url": "https://github.com/Coff0xc/CTF-MCP",
+      "stars": 14,
+      "language": "Python",
+      "updatedAt": "2026-04-20T07:55:33Z"
+    },
+    {
       "name": "Hexstrike-ai-6.2",
       "description": "This project is based on the Yenn.exe branch submitted by the hexstrike community, with modifications added and areas for improvement.",
       "url": "https://github.com/Coff0xc/Hexstrike-ai-6.2",
       "stars": 14,
-      "language": "Python",
-      "updatedAt": "2026-04-06T13:42:46Z"
-    },
-    {
-      "name": "CTF-MCP",
-      "description": "MCP Server for CTF challenges - 126 tools for Web/Crypto/Pwn | CTF 挑战 MCP 服务器 - Web/密码学/二进制利用工具集",
-      "url": "https://github.com/Coff0xc/CTF-MCP",
-      "stars": 13,
       "language": "Python",
       "updatedAt": "2026-04-06T13:42:46Z"
     },
