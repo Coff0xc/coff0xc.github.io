@@ -39,12 +39,12 @@
     },
     "about": {
       "title": "简历及简介",
-      "intro": "我是一名 2026 届毕业生，目前在 <strong>360 (Qihoo 360)</strong> 担任 <strong>L2 安全分析工程师</strong>。专注于高风险环境下的威胁缓解、红队自动化以及 LLM 安全评估。",
+      "intro": "Security researcher focused on red team automation, LLM security assessment, and kernel internals.",
       "roles": "职业经历",
       "techStack": "技术细节",
       "interests": "研究方向",
       "contact": "联系方式",
-      "roles_list": "<li><strong>360</strong> / L2 安全分析工程师 (2025.08 - 至今)</li><li><strong>奇安信</strong> / 安全服务实习生 (2025.05 - 2025.07)</li><li><strong>东软</strong> / 运维工程师 (2024.09 - 2025.04)</li><li><strong>集成电路设计</strong> / 在读学生</li>",
+      "roles_list": "<li>Security Analysis</li><li>Security Service</li><li>IC Design Student</li>",
       "interests_desc": "红队自动化 (Red Team Ops), 威胁情报分析, LLM 攻防, 内核安全, 硬件漏洞利用 (Embedded Exploitation)"
     },
     "sidebar": {
@@ -127,12 +127,12 @@
     },
     "about": {
       "title": "About & Career",
-      "intro": "I am a student graduating in 2026, currently serving as an <strong>L2 Security Analysis Engineer</strong> at <strong>360 (Qihoo 360)</strong>. Specialized in threat mitigation, red team automation, and LLM security.",
+      "intro": "Security researcher focused on red team automation, LLM security assessment, and kernel internals.",
       "roles": "Experience",
       "techStack": "Technical Stack",
       "interests": "Interests",
       "contact": "Contact",
-      "roles_list": "<li><strong>360</strong> / L2 Security Analysis Engineer (2025.08 - Present)</li><li><strong>QiAnXin</strong> / Sec Service Intern (2025.05 - 2025.07)</li><li><strong>Neusoft</strong> / O&M Engineer (2024.09 - 2025.04)</li><li><strong>IC Design</strong> / Student</li>",
+      "roles_list": "<li>Security Analysis</li><li>Security Service</li><li>IC Design Student</li>",
       "interests_desc": "Red Team Automation, Threat Intelligence, LLM Security, Kernel Internals, Hardware Exploitation"
     },
     "sidebar": {
