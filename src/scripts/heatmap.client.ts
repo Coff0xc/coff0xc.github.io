@@ -51,8 +51,9 @@ function initHeatmap() {
     if (totalDisplay) totalDisplay.textContent = current.total.toLocaleString();
 
     // Update button states
-    if (prevBtn) prevBtn.disabled = currentIndex === 0;
-    if (nextBtn) nextBtn.disabled = currentIndex === years.length - 1;
+    // Prev goes to older years (higher index), Next goes to newer years (lower index)
+    if (prevBtn) prevBtn.disabled = currentIndex === years.length - 1;
+    if (nextBtn) nextBtn.disabled = currentIndex === 0;
 
     console.log('Display updated:', {
       year: current.year,
@@ -66,8 +67,8 @@ function initHeatmap() {
   prevBtn.addEventListener('click', (e) => {
     e.preventDefault();
     console.log('Prev button clicked, currentIndex:', currentIndex);
-    if (currentIndex > 0) {
-      currentIndex--;
+    if (currentIndex < years.length - 1) {
+      currentIndex++;  // Move to older year (higher index)
       updateDisplay();
     }
   });
@@ -75,8 +76,8 @@ function initHeatmap() {
   nextBtn.addEventListener('click', (e) => {
     e.preventDefault();
     console.log('Next button clicked, currentIndex:', currentIndex);
-    if (currentIndex < years.length - 1) {
-      currentIndex++;
+    if (currentIndex > 0) {
+      currentIndex--;  // Move to newer year (lower index)
       updateDisplay();
     }
   });
