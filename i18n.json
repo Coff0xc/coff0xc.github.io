@@ -1,0 +1,178 @@
+{
+  "zh": {
+    "nav": {
+      "home": "首页",
+      "projects": "项目",
+      "okr": "进展",
+      "blog": "博客",
+      "about": "关于"
+    },
+    "home": {
+      "title": "安全工程 · 智能驱动"
+    },
+    "okr": {
+      "title": "2026 OKR",
+      "lastUpdate": "最后更新",
+      "openSource": "开源贡献",
+      "bugBounty": "漏洞实战",
+      "engineering": "代码工程",
+      "research": "学术安全",
+      "metrics": {
+        "pr": "PR 提交",
+        "contributions": "GitHub 贡献",
+        "total": "漏洞总数",
+        "loc": "代码行数",
+        "papers": "论文复现",
+        "cve": "CVE 编号"
+      }
+    },
+    "projects": {
+      "title": "项目实战",
+      "hexstrike": "Hexstrike-ai-6.2",
+      "hexstrike_desc": "基于 Yenn.exe 分支深度定制的红队自动化工具，针对语义分析与命令编排进行了多项功能增强。",
+      "orchestrator": "AutoRedTeam-Orch",
+      "orchestrator_desc": "全自动红队渗透智能体，支持智能目标分析、自动化执行与报告生成。",
+      "api_scan": "Github-API-scan",
+      "api_scan_desc": "GitHub 敏感信息泄露扫描器，支持 OpenAI/Claude 等多平台 Key 异步验证与 TUI 面板。",
+      "llm_sec": "LLM-Security-Framework",
+      "llm_sec_desc": "专门用于评估大语言模型安全性的研究框架，涵盖对抗性攻击与防御评估。"
+    },
+    "about": {
+      "title": "简历及简介",
+      "intro": "Security researcher focused on red team automation, LLM security assessment, and kernel internals.",
+      "roles": "职业经历",
+      "techStack": "技术细节",
+      "interests": "研究方向",
+      "contact": "联系方式",
+      "roles_list": "<li>Security Analysis</li><li>Security Service</li><li>IC Design Student</li>",
+      "interests_desc": "红队自动化 (Red Team Ops), 威胁情报分析, LLM 攻防, 内核安全, 硬件漏洞利用 (Embedded Exploitation)"
+    },
+    "sidebar": {
+      "stats": "数据统计",
+      "repos": "仓库",
+      "followers": "关注者",
+      "stars": "星标",
+      "techStack": "技术栈",
+      "focus": "专注领域",
+      "focus1": "红队自动化",
+      "focus2": "LLM 安全",
+      "focus3": "内核研究",
+      "links": "链接"
+    },
+    "theme": {
+      "light": "☀ 浅色",
+      "dark": "☾ 深色"
+    },
+    "footer": {
+      "status": "系统状态",
+      "nominal": "运营中"
+    },
+    "projects_meta": {
+      "meta1": "01 / 智能攻防",
+      "meta2": "02 / 侦察扫描",
+      "meta3": "03 / 红队工具",
+      "meta4": "04 / 安全研究"
+    },
+    "terminal": {
+      "line1": "> 正在初始化系统核心...",
+      "line2": "> 加载安全模块中...",
+      "line3": "> 网络连接稳定",
+      "line4": "> COFF0XC_SHELL 就绪",
+      "prompt": "root@coff0xc:~$"
+    },
+    "seo": {
+      "title": "COFF0XC - 安全工程",
+      "description": "安全工程师 | 红队自动化、LLM 安全、内核研究"
+    },
+    "backToTop": "返回顶部",
+    "shortcuts": "快捷键: L 切换语言, T 切换主题"
+  },
+  "en": {
+    "nav": {
+      "home": "Home",
+      "projects": "Projects",
+      "okr": "Goals",
+      "blog": "Blog",
+      "about": "About"
+    },
+    "home": {
+      "title": "Security Engineering."
+    },
+    "okr": {
+      "title": "2026 OKR",
+      "lastUpdate": "Last Update",
+      "openSource": "Open Source",
+      "bugBounty": "Bug Bounty",
+      "engineering": "Engineering",
+      "research": "SEC Research",
+      "metrics": {
+        "pr": "Pull Requests",
+        "contributions": "GitHub Contributions",
+        "total": "Total Bugs",
+        "loc": "Lines of Code",
+        "papers": "Paper Repos",
+        "cve": "CVE IDs"
+      }
+    },
+    "projects": {
+      "title": "Projects",
+      "hexstrike": "Hexstrike-ai-6.2",
+      "hexstrike_desc": "Deeply customized Red Teaming tool based on Yenn.exe, enhanced with advanced semantic orchestration.",
+      "orchestrator": "AutoRedTeam-Orch",
+      "orchestrator_desc": "Autonomous agent for offensive security, featuring intelligent target analysis and automated execution.",
+      "api_scan": "Github-API-scan",
+      "api_scan_desc": "Scanner for leaked Github API keys with async validation for OpenAI/Claude and a TUI dashboard.",
+      "llm_sec": "LLM-Security-Framework",
+      "llm_sec_desc": "Specialized framework for evaluating Large Language Model security, including adversarial testing."
+    },
+    "about": {
+      "title": "About & Career",
+      "intro": "Security researcher focused on red team automation, LLM security assessment, and kernel internals.",
+      "roles": "Experience",
+      "techStack": "Technical Stack",
+      "interests": "Interests",
+      "contact": "Contact",
+      "roles_list": "<li>Security Analysis</li><li>Security Service</li><li>IC Design Student</li>",
+      "interests_desc": "Red Team Automation, Threat Intelligence, LLM Security, Kernel Internals, Hardware Exploitation"
+    },
+    "sidebar": {
+      "stats": "Quick Stats",
+      "repos": "Repos",
+      "followers": "Followers",
+      "stars": "Stars",
+      "techStack": "Tech Stack",
+      "focus": "Focus",
+      "focus1": "Red Team Automation",
+      "focus2": "LLM Security",
+      "focus3": "Kernel Internals",
+      "links": "Links"
+    },
+    "theme": {
+      "light": "☀ Light",
+      "dark": "☾ Dark"
+    },
+    "footer": {
+      "status": "System status",
+      "nominal": "NOMINAL"
+    },
+    "projects_meta": {
+      "meta1": "01 / Agentic Offensive",
+      "meta2": "02 / Recon + Scan",
+      "meta3": "03 / Red Tooling",
+      "meta4": "04 / Research"
+    },
+    "terminal": {
+      "line1": "> INITIALIZING_SYSTEM_CORE...",
+      "line2": "> LOADING_ENCLAVE_MODULES...",
+      "line3": "> NETWORK_CONNECTION_STABLE",
+      "line4": "> COFF0XC_SHELL_READY",
+      "prompt": "root@coff0xc:~$"
+    },
+    "seo": {
+      "title": "COFF0XC - Security Engineering",
+      "description": "Security Engineer | Red Team Automation, LLM Security, Kernel Internals"
+    },
+    "backToTop": "Back to Top",
+    "shortcuts": "Shortcuts: L for language, T for theme"
+  }
+}

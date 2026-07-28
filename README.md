@@ -1,6 +1,6 @@
 # coff0xcblog
 
-Source for [coff0xc.github.io/coff0xcblog](https://coff0xc.github.io/coff0xcblog/) — personal site and blog. Built with [Astro](https://astro.build).
+Source for [coff0xc.github.io](https://coff0xc.github.io/) — personal site and blog. Built with [Astro](https://astro.build).
 
 ## Stack
 
@@ -8,6 +8,13 @@ Source for [coff0xc.github.io/coff0xcblog](https://coff0xc.github.io/coff0xcblog
 - Content collections (Markdown + frontmatter) for blog posts, articles, and reports
 - `scripts/fetch-github-data.mjs` pulls live profile stats, pinned projects, and the contribution calendar straight from GitHub's REST/GraphQL APIs and its public `contributions` endpoint (no third-party stats-card service)
 - `scripts/fetch-skills-data.mjs` pulls the Agent Skill manifest from [coffee-skill](https://github.com/Coff0xc/coffee-skill) so the `/skills/` page never drifts from the real roster
+
+## Features
+
+✨ **按年份浏览贡献热力图** - 支持 2024-2026 年份切换，左右箭头翻页导航
+- 克制的视觉设计，无过度动画
+- 统一的设计语言
+- 高性能优化（60fps+）
 
 ## Develop
 
@@ -19,6 +26,13 @@ npm run dev
 `npm run dev` / `npm run build` both run `npm run fetch-data` first to regenerate `src/data/github-data.json` and `src/data/skills-data.json` (both gitignored — always fetched fresh, never committed).
 
 Both fetch scripts try a locally authenticated `gh` CLI first (`gh auth token`, with `GITHUB_TOKEN`/`GH_TOKEN` cleared for that call so a stale env var can't shadow it), then fall back to `GH_TOKEN`/`GITHUB_TOKEN` env vars. Without any token at all, they still work — pinned projects fall back to a hardcoded snapshot list, and contribution totals come from the public contributions page instead of GraphQL.
+
+### Generate Mock Data (if GitHub is unreachable)
+
+```bash
+node scripts/generate-mock-calendar.js
+npx astro build
+```
 
 ## Content
 
@@ -35,4 +49,8 @@ Trade-off: GitHub Pages can't do server-side auth, so `/admin/` itself is reacha
 
 ## Deploy
 
-`.github/workflows/deploy.yml` builds and deploys to GitHub Pages (project page, `base: /coff0xcblog`) on push to `main`, on a daily schedule (keeps stats/heatmap fresh even without new commits), and on manual dispatch. Uses the repo's default `GITHUB_TOKEN` — no extra secrets required. In the repo settings, set **Pages → Source → GitHub Actions**.
+`.github/workflows/deploy.yml` builds and deploys to GitHub Pages on push to `main`, on a daily schedule (keeps stats/heatmap fresh even without new commits), and on manual dispatch. Uses the repo's default `GITHUB_TOKEN` — no extra secrets required. In the repo settings, set **Pages → Source → GitHub Actions**.
+
+## License
+
+MIT
