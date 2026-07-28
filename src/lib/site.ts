@@ -1,5 +1,5 @@
-export const SITE_URL = 'https://coff0xc.github.io/coff0xcblog/';
-export const BASE = '/coff0xcblog/';
+export const SITE_URL = 'https://coff0xc.github.io/';
+export const BASE = '/';
 
 /** Prefix an internal path with the GitHub Pages project-page base. */
 export function withBase(path: string): string {

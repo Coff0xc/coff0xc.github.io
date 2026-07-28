@@ -3,7 +3,7 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://coff0xc.github.io',
-  base: '/coff0xcblog',
+  base: '/',
   trailingSlash: 'always',
   integrations: [
     sitemap({
