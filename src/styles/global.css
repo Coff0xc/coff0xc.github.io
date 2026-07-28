@@ -219,13 +219,19 @@ h2 {
     font-weight: 900;
     margin-bottom: 44px;
     letter-spacing: -0.5px;
-    max-width: 11ch;
+    max-width: 600px;
+}
+
+.intro h1 span {
+    display: block;
 }
 
 .intro h1 em {
     font-style: italic;
     font-weight: 500;
     color: var(--accent);
+    display: block;
+    margin-top: 0.15em;
 }
 
 /* Attack-chain signature element */
