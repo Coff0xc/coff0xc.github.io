@@ -991,13 +991,7 @@ h2 {
 }
 
 /* Transition animations */
-[data-i18n] {
-    transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-[data-zh][data-en] {
-    transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* Language switching - no transition for instant update */
 
 /* Skip link for accessibility */
 .skip-link {
