@@ -1,0 +1,92 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import StatsSidebar from '../../components/StatsSidebar.astro';
+import skillsData from '../../data/skills-data.json';
+import githubData from '../../data/github-data.json';
+---
+<BaseLayout
+    title="Skills - COFF0XC"
+    description="Agent skill roster, synced automatically from the coffee-skill repo"
+    path="skills/"
+>
+    <div class="content-left">
+        <section id="skills-list">
+            <h2 data-i18n="skills.title">Skills</h2>
+            <p class="heatmap-subtitle" style="margin-bottom: 32px;" data-i18n="skills.subtitle">
+                Agent skill roster, synced automatically from the coffee-skill repo — click to view details
+            </p>
+            {skillsData.skills.length > 0 ? (
+                <div class="skills-list">
+                    {skillsData.skills.map((skill) => (
+                        <div class="skill-row" data-skill={JSON.stringify(skill)}>
+                            <div class="skill-name">{skill.name}</div>
+                            <p class="skill-desc">{skill.description.slice(0, 150)}{skill.description.length > 150 ? '...' : ''}</p>
+                            {skill.capabilityDomains.length > 0 && (
+                                <div class="skill-domains">
+                                    {skill.capabilityDomains.slice(0, 4).map((d: string) => (
+                                        <span class="skill-domain-tag">{d}</span>
+                                    ))}
+                                    {skill.capabilityDomains.length > 4 && (
+                                        <span class="skill-domain-tag">+{skill.capabilityDomains.length - 4}</span>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <p class="activity-note" data-i18n="skills.empty">Could not fetch the skill roster at build time — try again shortly.</p>
+            )}
+        </section>
+    </div>
+    <StatsSidebar stats={githubData.stats} />
+
+    <!-- Skill detail drawer -->
+    <div id="skill-drawer-overlay" class="skill-drawer-overlay">
+        <div class="skill-drawer">
+            <div class="skill-drawer-header">
+                <div style="flex: 1;">
+                    <h3 class="skill-drawer-title"></h3>
+                    <div style="margin-bottom: 12px;">
+                        <span class="skill-drawer-badge"></span>
+                    </div>
+                </div>
+                <button id="skill-drawer-close" class="skill-drawer-close" aria-label="关闭">×</button>
+            </div>
+
+            <div class="skill-drawer-section">
+                <h4>何时使用 (When to Use)</h4>
+                <p class="skill-drawer-when"></p>
+            </div>
+
+            <div class="skill-drawer-section">
+                <h4>能力领域 (Capability Domains)</h4>
+                <div class="skill-drawer-domains"></div>
+            </div>
+
+            <div class="skill-drawer-section">
+                <h4>适用场景 (Applicable Scenarios)</h4>
+                <ul class="skill-drawer-usage"></ul>
+            </div>
+
+            <div class="skill-drawer-section">
+                <h4>涉及技术 (Technologies)</h4>
+                <div class="skill-drawer-keywords"></div>
+            </div>
+
+            <div class="skill-drawer-section">
+                <h4>触发命令 (Trigger Command)</h4>
+                <code class="skill-drawer-trigger"></code>
+            </div>
+
+            <div class="skill-drawer-section">
+                <h4>完整描述 (Full Description)</h4>
+                <p class="skill-drawer-desc"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        import '../../scripts/skills.client.ts';
+    </script>
+</BaseLayout>

@@ -1,0 +1,20 @@
+# build
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# generated at build/dev time — fetched fresh by scripts/fetch-*-data.mjs
+src/data/github-data.json
+src/data/skills-data.json
+
+# env
+.env
+.env.*
+!.env.example
+
+# logs / OS
+npm-debug.log*
+.DS_Store
+Thumbs.db

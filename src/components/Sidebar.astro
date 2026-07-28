@@ -1,0 +1,32 @@
+---
+import { withBase } from '../lib/site';
+
+interface Props {
+    currentPath?: string;
+}
+
+const { currentPath = '' } = Astro.props;
+---
+<aside class="nav-sidebar" role="navigation" aria-label="Main navigation">
+    <div class="aside-top">
+        <a href={withBase('')} class="brand">COFF0XC</a>
+        <nav>
+            <ul>
+                <li><a href={withBase('')} class={currentPath === '' ? 'active' : ''} data-i18n="nav.home">Index</a></li>
+                <li><a href={withBase('#projects')} data-i18n="nav.projects">Projects</a></li>
+                <li><a href={withBase('#okr')} data-i18n="nav.okr">Status</a></li>
+                <li><a href={withBase('skills/')} class={currentPath === 'skills/' ? 'active' : ''} data-i18n="nav.skills">Skills</a></li>
+                <li><a href={withBase('blog/')} class={currentPath.startsWith('blog/') ? 'active' : ''} data-i18n="nav.blog">Blog</a></li>
+                <li><a href={withBase('#about')} data-i18n="nav.about">Info</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="aside-bottom">
+        <div class="aside-footer">
+            &copy; 2024 — 2026<br>
+            Security Engineering
+        </div>
+        <button id="lang-toggle" class="lang-switch" type="button">ZH / EN</button>
+        <button id="theme-toggle" class="theme-switch" type="button">☀ Light</button>
+    </div>
+</aside>

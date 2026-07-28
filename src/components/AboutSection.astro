@@ -1,0 +1,31 @@
+---
+import { i18n } from '../data/i18n';
+---
+<section id="about">
+    <h2 data-i18n="about.title">Information</h2>
+    <div class="about-grid">
+        <div class="about-text" data-i18n="about.intro">
+            Security researcher focused on red team automation, LLM security assessment, and kernel internals.
+        </div>
+        <div class="details-grid">
+            <div class="info-box">
+                <h4 data-i18n="about.roles">Experience</h4>
+                <ul>
+                    {i18n.zh.about.rolesList.map((role) => <li>{role}</li>)}
+                </ul>
+            </div>
+            <div class="info-box">
+                <h4 data-i18n="about.techStack">Core Stack</h4>
+                <p>Python, Go, C/C++, Assembly, Rust</p>
+            </div>
+            <div class="info-box">
+                <h4 data-i18n="about.interests">Focus</h4>
+                <p data-i18n="about.interestsDesc">Red Team Automation, LLM Security, Kernel Internals</p>
+            </div>
+            <div class="info-box">
+                <h4 data-i18n="about.contact">Reach</h4>
+                <p><a href="https://github.com/Coff0xc" target="_blank" rel="noopener">GitHub</a></p>
+            </div>
+        </div>
+    </div>
+</section>

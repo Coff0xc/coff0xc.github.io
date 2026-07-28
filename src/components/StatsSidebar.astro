@@ -1,0 +1,70 @@
+---
+interface Props {
+  stats: { repos: number; followers: number | null; stars: number };
+}
+const { stats } = Astro.props;
+---
+<aside class="sidebar-right" role="complementary" aria-label="Quick information">
+    <div class="sidebar-sticky">
+        <div class="stats-group">
+            <h3 data-i18n="sidebar.stats">Quick Stats</h3>
+            <div class="quick-stats">
+                <div class="stat-item">
+                    <span class="stat-value">{stats.repos}</span>
+                    <span class="stat-label" data-i18n="sidebar.repos">Repos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">{stats.followers ?? '?'}</span>
+                    <span class="stat-label" data-i18n="sidebar.followers">Followers</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">{stats.stars}</span>
+                    <span class="stat-label" data-i18n="sidebar.stars">Stars</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-group">
+            <h3 data-i18n="sidebar.techStack">Tech Stack</h3>
+            <div class="tech-tags">
+                <span class="tag">Python</span>
+                <span class="tag">Go</span>
+                <span class="tag">C/C++</span>
+                <span class="tag">Assembly</span>
+                <span class="tag">Rust</span>
+            </div>
+        </div>
+
+        <div class="stats-group">
+            <h3 data-i18n="sidebar.focus">Focus</h3>
+            <div class="focus-list">
+                <div class="focus-item">
+                    <span class="focus-dot" style="--stage-color: var(--stage-injection)" aria-hidden="true"></span>
+                    <span data-i18n="sidebar.focus1">Red Team Automation</span>
+                </div>
+                <div class="focus-item">
+                    <span class="focus-dot" style="--stage-color: var(--stage-agent)" aria-hidden="true"></span>
+                    <span data-i18n="sidebar.focus2">LLM Security</span>
+                </div>
+                <div class="focus-item">
+                    <span class="focus-dot" style="--stage-color: var(--stage-tool)" aria-hidden="true"></span>
+                    <span data-i18n="sidebar.focus3">Kernel Internals</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-group">
+            <h3 data-i18n="sidebar.links">Links</h3>
+            <div class="social-links">
+                <a href="https://github.com/Coff0xc" target="_blank" rel="noopener" class="social-link">
+                    <span>GitHub</span>
+                    <span>→</span>
+                </a>
+                <a href="https://github.com/Coff0xc/Coff0xc/issues" target="_blank" rel="noopener" class="social-link">
+                    <span>Email</span>
+                    <span>→</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</aside>

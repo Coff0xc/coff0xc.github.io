@@ -1,0 +1,28 @@
+---
+import { i18n } from '../data/i18n';
+
+const stages = [
+  { key: 'stage1', cssVar: '--stage-injection' },
+  { key: 'stage2', cssVar: '--stage-agent' },
+  { key: 'stage3', cssVar: '--stage-mcp' },
+  { key: 'stage4', cssVar: '--stage-tool' },
+] as const;
+---
+<section id="home" class="intro">
+    <h1>
+        <span data-i18n="home.titleMain">Engineered Security.</span>
+        <em data-i18n="home.titleAccent">High Stakes.</em>
+    </h1>
+
+    <div class="chain">
+        <ol class="chain-row">
+            {stages.map((s) => (
+                <li class="chain-stage">
+                    <span class="chain-dot" style={`--stage-color: var(${s.cssVar})`} aria-hidden="true" />
+                    <span class="chain-label" data-i18n={`chain.${s.key}`}>{i18n.en.chain[s.key]}</span>
+                </li>
+            ))}
+        </ol>
+        <p class="chain-caption" data-i18n="chain.caption">{i18n.en.chain.caption}</p>
+    </div>
+</section>

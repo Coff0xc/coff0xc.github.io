@@ -1,0 +1,120 @@
+---
+import ThemeInit from '../../components/ThemeInit.astro';
+import '../../styles/global.css';
+import { withBase } from '../../lib/site';
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')} />
+    <title>Admin - COFF0XC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet"
+    />
+    <ThemeInit />
+</head>
+<body>
+    <div class="admin-shell">
+        <h1>Publish</h1>
+        <p class="admin-note">
+            Paste a GitHub fine-grained PAT scoped to just the <code>Coff0xc/coff0xcblog</code> repo,
+            with <strong>Contents: Read and write</strong> permission. It's stored only in this
+            browser's <code>localStorage</code> and sent directly to <code>api.github.com</code> —
+            never through any third-party server.
+            <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Create one →</a>
+        </p>
+
+        <div class="admin-field">
+            <label for="pat-input">GitHub Token</label>
+            <input type="password" id="pat-input" placeholder="github_pat_..." autocomplete="off" />
+        </div>
+        <div class="admin-actions">
+            <button class="admin-button secondary" id="pat-save" type="button">Save token</button>
+            <button class="admin-button secondary" id="pat-clear" type="button">Clear</button>
+            <span class="admin-status" id="pat-status"></span>
+        </div>
+
+        <hr style="border-color: var(--border); margin: 32px 0;" />
+
+        <div class="admin-field">
+            <label for="post-select">Edit existing post</label>
+            <select id="post-select">
+                <option value="">— New post —</option>
+            </select>
+        </div>
+
+        <div class="admin-row">
+            <div class="admin-field">
+                <label for="f-title">Title (中文)</label>
+                <input id="f-title" type="text" />
+            </div>
+            <div class="admin-field">
+                <label for="f-titleEn">Title (English)</label>
+                <input id="f-titleEn" type="text" />
+            </div>
+        </div>
+
+        <div class="admin-row">
+            <div class="admin-field">
+                <label for="f-date">Date</label>
+                <input id="f-date" type="date" />
+            </div>
+            <div class="admin-field">
+                <label for="f-tags">Tags (comma separated)</label>
+                <input id="f-tags" type="text" placeholder="research, mcp" />
+            </div>
+            <div class="admin-field">
+                <label for="f-type">Type</label>
+                <select id="f-type">
+                    <option value="article">Article</option>
+                    <option value="report">Report</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="admin-field">
+            <label for="f-summary">Summary (中文)</label>
+            <input id="f-summary" type="text" />
+        </div>
+        <div class="admin-field">
+            <label for="f-summaryEn">Summary (English)</label>
+            <input id="f-summaryEn" type="text" />
+        </div>
+
+        <div class="admin-field" id="pdf-field" style="display: none;">
+            <label for="f-pdf">PDF attachment</label>
+            <input id="f-pdf" type="file" accept="application/pdf" />
+        </div>
+
+        <div class="admin-field">
+            <label for="f-body">Body (Markdown)</label>
+            <textarea id="f-body" placeholder="## 正文..."></textarea>
+        </div>
+
+        <div class="admin-actions">
+            <button class="admin-button" id="publish-btn" type="button">Publish</button>
+            <span class="admin-status" id="publish-status"></span>
+        </div>
+
+        <hr style="border-color: var(--border); margin: 40px 0;" />
+
+        <div class="audit-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h2 style="margin: 0;">审计日志 (Audit Log)</h2>
+                <button class="admin-button secondary" id="clear-audit" type="button">清除日志</button>
+            </div>
+            <div id="audit-logs" class="audit-logs"></div>
+        </div>
+    </div>
+
+    <script>
+        import '../../scripts/admin.client.ts';
+    </script>
+</body>
+</html>

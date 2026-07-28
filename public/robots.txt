@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+
+Sitemap: https://coff0xc.github.io/coff0xcblog/sitemap-index.xml

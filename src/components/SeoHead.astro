@@ -1,0 +1,61 @@
+---
+import { withBase, canonicalUrl } from '../lib/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  path?: string;
+}
+
+const {
+  title = 'COFF0XC - Security Engineer | Red Team Automation & LLM Security',
+  description = 'COFF0XC - Security Researcher | Red Team Automation, LLM Security, Kernel Internals',
+  path = '',
+} = Astro.props;
+
+const canonical = canonicalUrl(path);
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'COFF0XC',
+  url: canonicalUrl(''),
+  jobTitle: 'Security Engineer',
+  sameAs: ['https://github.com/Coff0xc'],
+  knowsAbout: [
+    'Red Team Automation',
+    'LLM Security',
+    'Penetration Testing',
+    'Kernel Internals',
+    'Offensive Security',
+  ],
+};
+---
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content={description} />
+<meta name="keywords" content="security engineer, red team, penetration testing, LLM security, offensive security" />
+<meta name="author" content="COFF0XC" />
+
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonical} />
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+
+<link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')} />
+<link rel="canonical" href={canonical} />
+
+<title>{title}</title>
+
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} is:inline />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;0,900;1,500&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+  rel="stylesheet"
+/>

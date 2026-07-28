@@ -1,0 +1,47 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import StatsSidebar from '../../components/StatsSidebar.astro';
+import { withBase } from '../../lib/site';
+import githubData from '../../data/github-data.json';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { id: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+<BaseLayout
+    title={`${post.data.title} - COFF0XC`}
+    description={post.data.summary}
+    path={`blog/${post.id}/`}
+>
+    <div class="content-left">
+        <a href={withBase('blog/')} class="back-link" data-i18n="blog.backToBlog">← Back to Blog</a>
+        <section id="blog-post">
+            <article class="post-content">
+                <h1>{post.data.title}</h1>
+                <div class="post-meta">
+                    {post.data.date.toISOString().slice(0, 10)}
+                    {post.data.type === 'report' && (
+                        <span class="post-type-tag report" data-i18n="blog.typeReport">Report</span>
+                    )}
+                    {post.data.tags.map((tag) => <span class="post-tag">{tag}</span>)}
+                </div>
+                {post.data.pdfUrl && (
+                    <a class="pdf-download" href={withBase(post.data.pdfUrl.replace(/^\//, ''))} target="_blank" rel="noopener">
+                        <span data-i18n="blog.downloadPdf">Download PDF</span>
+                        <span aria-hidden="true">↓</span>
+                    </a>
+                )}
+                <Content />
+            </article>
+        </section>
+    </div>
+    <StatsSidebar stats={githubData.stats} />
+</BaseLayout>

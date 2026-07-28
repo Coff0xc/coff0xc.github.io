@@ -1,0 +1,19 @@
+---
+// Blocking inline script placed early in <head> so the stored/preferred
+// theme applies before first paint (avoids a dark/light flash-of-wrong-theme).
+// Language text swapping still happens after DOMContentLoaded in site.client.ts
+// since it has to walk already-rendered DOM nodes.
+---
+<script is:inline>
+  (function () {
+    try {
+      var stored = localStorage.getItem('theme');
+      var theme = stored === 'light' || stored === 'dark'
+        ? stored
+        : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    } catch (e) {
+      /* localStorage unavailable (privacy mode etc.) — default dark theme stands. */
+    }
+  })();
+</script>

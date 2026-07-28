@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import ProjectsGrid from '../components/ProjectsGrid.astro';
+import ActivitySection from '../components/ActivitySection.astro';
+import AboutSection from '../components/AboutSection.astro';
+import StatsSidebar from '../components/StatsSidebar.astro';
+import data from '../data/github-data.json';
+---
+<BaseLayout path="">
+    <div class="content-left">
+        <Hero />
+        <ProjectsGrid projects={data.projects} />
+        <ActivitySection
+            activity={data.activity}
+            generatedAt={data.generatedAt}
+            calendars={data.contributionCalendars}
+        />
+        <AboutSection />
+    </div>
+    <StatsSidebar stats={data.stats} />
+</BaseLayout>

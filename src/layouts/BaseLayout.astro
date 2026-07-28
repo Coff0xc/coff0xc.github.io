@@ -1,0 +1,38 @@
+---
+import SeoHead from '../components/SeoHead.astro';
+import ThemeInit from '../components/ThemeInit.astro';
+import Sidebar from '../components/Sidebar.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  path?: string;
+}
+
+const { title, description, path = '' } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <SeoHead title={title} description={description} path={path} />
+    <ThemeInit />
+</head>
+<body>
+    <a href="#home" class="skip-link">Skip to content</a>
+    <button id="back-to-top" class="back-to-top" aria-label="Back to top" title="Back to Top">↑</button>
+
+    <div class="wrapper">
+        <Sidebar currentPath={path} />
+        <main role="main" aria-label="Main content">
+            <div class="main-content">
+                <slot />
+            </div>
+        </main>
+    </div>
+
+    <script>
+        import '../scripts/site.client.ts';
+    </script>
+</body>
+</html>

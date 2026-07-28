@@ -1,0 +1,122 @@
+---
+import { i18n, type Lang } from '../data/i18n';
+
+interface Day {
+  date: string;
+  week: number;
+  weekday: number;
+  level: number;
+  count: number;
+}
+interface MonthLabel {
+  week: number;
+  month: number;
+}
+interface YearCalendar {
+  year: number;
+  total: number;
+  days: Day[];
+  monthLabels: MonthLabel[];
+}
+interface Props {
+  calendars: YearCalendar[];
+}
+
+const { calendars } = Astro.props;
+
+// Sort calendars by year descending (newest first)
+const sortedCalendars = [...calendars].sort((a, b) => b.year - a.year);
+
+// Find 2026 calendar or use the first available
+const currentYear = 2026;
+const defaultIndex = sortedCalendars.findIndex(cal => cal.year === currentYear);
+const initialIndex = defaultIndex >= 0 ? defaultIndex : 0;
+
+function tooltip(lang: Lang, day: Day): string {
+  const t = i18n[lang].heatmap;
+  if (day.count === 0) return t.tooltipNone.replace('{date}', day.date);
+  if (day.count === 1) return t.tooltipOne.replace('{date}', day.date);
+  return t.tooltipMany.replace('{date}', day.date).replace('{n}', String(day.count));
+}
+---
+<div class="heatmap-section">
+    <div class="heatmap-header">
+        <div>
+            <h3 data-i18n="heatmap.title">Contribution Activity</h3>
+            <p class="heatmap-subtitle" data-i18n="heatmap.subtitle">GitHub activity by year</p>
+        </div>
+        <div class="heatmap-controls">
+            <button class="heatmap-nav-btn" id="heatmap-prev" aria-label="Previous year">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <div class="heatmap-year-display">
+                <span id="heatmap-current-year" class="heatmap-year-text">2026</span>
+                <div class="heatmap-total">
+                    <strong id="heatmap-total-value">0</strong> <span data-i18n="heatmap.totalSuffix">contributions</span>
+                </div>
+            </div>
+            <button class="heatmap-nav-btn" id="heatmap-next" aria-label="Next year">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    {sortedCalendars.length > 0 ? (
+        <div class="heatmap-container">
+            {sortedCalendars.map((cal, index) => {
+                const weekCount = cal.days.length ? Math.max(...cal.days.map((d) => d.week)) + 1 : 0;
+                const isDefault = index === initialIndex;
+                return (
+                    <div class={`heatmap-year-data ${isDefault ? 'active' : ''}`} data-year={cal.year} data-total={cal.total} data-is-default={isDefault}>
+                        <div class="heatmap-wrap">
+                            <div class="heatmap-months" style={`grid-template-columns: repeat(${weekCount}, 14px)`}>
+                                {cal.monthLabels.map((m) => (
+                                    <span
+                                        class="heatmap-month-label"
+                                        style={`grid-column: ${m.week + 1}`}
+                                        data-zh={i18n.zh.months[m.month]}
+                                        data-en={i18n.en.months[m.month]}
+                                    >{i18n.en.months[m.month]}</span>
+                                ))}
+                            </div>
+                            <div class="heatmap-grid" style={`grid-template-columns: repeat(${weekCount}, 11px)`}>
+                                {cal.days.map((d) => (
+                                    <div
+                                        class="heatmap-day"
+                                        role="img"
+                                        style={`grid-row: ${d.weekday + 1}; grid-column: ${d.week + 1}`}
+                                        data-level={d.level}
+                                        data-tooltip-zh={tooltip('zh', d)}
+                                        data-tooltip-en={tooltip('en', d)}
+                                        data-tooltip={tooltip('en', d)}
+                                        aria-label={tooltip('en', d)}
+                                    />
+                                ))}
+                            </div>
+                            <div class="heatmap-legend">
+                                <span data-i18n="heatmap.less">Less</span>
+                                <span class="heatmap-day" data-level="0"></span>
+                                <span class="heatmap-day" data-level="1"></span>
+                                <span class="heatmap-day" data-level="2"></span>
+                                <span class="heatmap-day" data-level="3"></span>
+                                <span class="heatmap-day" data-level="4"></span>
+                                <span data-i18n="heatmap.more">More</span>
+                            </div>
+                        </div>
+                    </div>
+                );
+            })}
+        </div>
+    ) : (
+        <p class="activity-note" data-i18n="heatmap.unavailable">Contribution data unavailable at build time.</p>
+    )}
+    <div class="heatmap-tooltip" id="heatmap-tooltip" role="tooltip"></div>
+</div>
+
+<script>
+    import '../scripts/heatmap.client.ts';
+</script>

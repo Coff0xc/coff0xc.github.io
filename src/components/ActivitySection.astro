@@ -1,0 +1,70 @@
+---
+import ContributionHeatmap from './ContributionHeatmap.astro';
+
+interface Activity {
+  totalContributions: number | null;
+  commits: number | null;
+  pullRequests: number | null;
+  issues: number | null;
+  repositoriesContributedTo: number | null;
+}
+interface Day {
+  date: string;
+  week: number;
+  weekday: number;
+  level: number;
+  count: number;
+}
+interface MonthLabel {
+  week: number;
+  month: number;
+}
+interface YearCalendar {
+  year: number;
+  total: number;
+  days: Day[];
+  monthLabels: MonthLabel[];
+}
+interface Props {
+  activity: Activity;
+  generatedAt: string;
+  calendars: YearCalendar[];
+}
+
+const { activity, generatedAt, calendars } = Astro.props;
+
+const metrics: Array<{ key: keyof Activity; value: number | null }> = [
+  { key: 'totalContributions', value: activity.totalContributions },
+  { key: 'commits', value: activity.commits },
+  { key: 'pullRequests', value: activity.pullRequests },
+  { key: 'repositoriesContributedTo', value: activity.repositoriesContributedTo },
+  { key: 'issues', value: activity.issues },
+];
+
+const metricI18nKey: Record<keyof Activity, string> = {
+  totalContributions: 'contributions',
+  commits: 'commits',
+  pullRequests: 'pullRequests',
+  repositoriesContributedTo: 'repositoriesContributedTo',
+  issues: 'issues',
+};
+
+const updatedDate = generatedAt.slice(0, 10);
+---
+<section id="okr">
+    <h2 data-i18n="okr.title">2026 Activity</h2>
+    <div class="activity-updated">
+        <span data-i18n="okr.lastUpdate">Data as of</span> {updatedDate}
+    </div>
+    <div class="activity-row">
+        {metrics.map((m) => (
+            <div class="activity-tile">
+                <span class="activity-value">{m.value ?? '—'}</span>
+                <span class="activity-label" data-i18n={`okr.metrics.${metricI18nKey[m.key]}`}>{metricI18nKey[m.key]}</span>
+            </div>
+        ))}
+    </div>
+    <p class="activity-note" data-i18n="okr.note">Real GitHub activity shown below, not fabricated goal targets.</p>
+
+    <ContributionHeatmap calendars={calendars} />
+</section>
