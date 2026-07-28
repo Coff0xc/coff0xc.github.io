@@ -46,30 +46,43 @@ function updateSEO() {
 
 function updateLanguage(lang: Lang) {
   document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+  document.documentElement.setAttribute('data-lang', lang);
 
-  document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((el) => {
-    const key = el.getAttribute('data-i18n');
-    if (!key) return;
-    const value = key.split('.').reduce<unknown>((acc, k) => (acc as Record<string, unknown> | undefined)?.[k], i18n[lang]);
-    if (typeof value !== 'string') return;
-    el.textContent = value;
-  });
+  // Fade out elements
+  const i18nElements = document.querySelectorAll<HTMLElement>('[data-i18n]');
+  i18nElements.forEach(el => el.style.opacity = '0');
 
-  // Bilingual content baked in at build time for dynamic, non-keyed data
-  // (heatmap month labels, day tooltips) — swapped by attribute pair
-  // instead of an i18n key lookup.
-  document.querySelectorAll<HTMLElement>('[data-zh][data-en]').forEach((el) => {
-    el.textContent = lang === 'zh' ? (el.dataset.zh as string) : (el.dataset.en as string);
-  });
-  document.querySelectorAll<HTMLElement>('[data-tooltip-zh][data-tooltip-en]').forEach((el) => {
-    const value = lang === 'zh' ? (el.dataset.tooltipZh as string) : (el.dataset.tooltipEn as string);
-    el.setAttribute('data-tooltip', value);
-    if (el.hasAttribute('aria-label')) el.setAttribute('aria-label', value);
-  });
+  // Wait for fade out, then update text and fade in
+  setTimeout(() => {
+    document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((el) => {
+      const key = el.getAttribute('data-i18n');
+      if (!key) return;
+      const value = key.split('.').reduce<unknown>((acc, k) => (acc as Record<string, unknown> | undefined)?.[k], i18n[lang]);
+      if (typeof value !== 'string') return;
+      el.textContent = value;
+    });
 
-  updateThemeButton();
-  updateActiveNav();
-  updateSEO();
+    // Bilingual content baked in at build time for dynamic, non-keyed data
+    // (heatmap month labels, day tooltips) — swapped by attribute pair
+    // instead of an i18n key lookup.
+    document.querySelectorAll<HTMLElement>('[data-zh][data-en]').forEach((el) => {
+      el.textContent = lang === 'zh' ? (el.dataset.zh as string) : (el.dataset.en as string);
+    });
+    document.querySelectorAll<HTMLElement>('[data-tooltip-zh][data-tooltip-en]').forEach((el) => {
+      const value = lang === 'zh' ? (el.dataset.tooltipZh as string) : (el.dataset.tooltipEn as string);
+      el.setAttribute('data-tooltip', value);
+      if (el.hasAttribute('aria-label')) el.setAttribute('aria-label', value);
+    });
+
+    updateThemeButton();
+    updateActiveNav();
+    updateSEO();
+
+    // Fade in elements
+    requestAnimationFrame(() => {
+      i18nElements.forEach(el => el.style.opacity = '1');
+    });
+  }, 150);
 }
 
 function toggleLanguage() {
