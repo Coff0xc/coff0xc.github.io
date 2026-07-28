@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-07-28T08:03:19.027Z",
+  "generatedAt": "2026-07-28T08:44:32.293Z",
   "warnings": [],
   "stats": {
-    "repos": 12,
+    "repos": 13,
     "followers": 55,
-    "stars": 430
+    "stars": 435
   },
   "activity": {
-    "totalContributions": 1230,
-    "commits": 1128,
+    "totalContributions": 1241,
+    "commits": 1138,
     "pullRequests": 4,
     "issues": 0,
-    "repositoriesContributedTo": 12
+    "repositoriesContributedTo": 13
   },
   "projects": [
     {
@@ -22,15 +22,6 @@
       "forks": 53,
       "language": "Python",
       "updatedAt": "2026-07-26T16:49:14Z"
-    },
-    {
-      "name": "AgentRed",
-      "description": "AI-powered red team workbench for authorized testing, evidence tracking, and report-ready findings. / 面向授权测试、证据追踪与报告交付的 AI 红队工作台。",
-      "url": "https://github.com/Coff0xc/AgentRed",
-      "stars": 9,
-      "forks": 0,
-      "language": "TypeScript",
-      "updatedAt": "2026-07-20T18:42:51Z"
     },
     {
       "name": "Github-API-scan",
@@ -54,10 +45,10 @@
       "name": "LLM-Security-Assessment-Framework",
       "description": "FORGEDAN — An Evolutionary Framework for LLM Security Assessment | 6 Attack Methods | 18 Model Adapters | Vue 3 Dashboard | Web Security Scanning",
       "url": "https://github.com/Coff0xc/LLM-Security-Assessment-Framework",
-      "stars": 20,
+      "stars": 21,
       "forks": 6,
       "language": "Python",
-      "updatedAt": "2026-07-20T18:42:34Z"
+      "updatedAt": "2026-07-28T08:13:12Z"
     },
     {
       "name": "coffee-skill",
@@ -67,6 +58,15 @@
       "forks": 0,
       "language": "Python",
       "updatedAt": "2026-07-23T14:07:54Z"
+    },
+    {
+      "name": "vero",
+      "description": "Evidence-Driven Autonomous Red Team Agent - The first AI penetration testing tool you can actually trust",
+      "url": "https://github.com/Coff0xc/vero",
+      "stars": 3,
+      "forks": 0,
+      "language": "Go",
+      "updatedAt": "2026-07-28T08:41:56Z"
     }
   ],
   "projectsMeta": {

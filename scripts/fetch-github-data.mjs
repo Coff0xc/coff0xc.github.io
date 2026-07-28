@@ -41,14 +41,14 @@ function resolveToken() {
 const TOKEN = resolveToken();
 
 // Used only if the GraphQL pinned-items query is unavailable (no token, or
-// insufficient scope) — snapshot of the real pinned repos as of 2026-07-26.
+// insufficient scope) — snapshot of the real pinned repos as of 2026-07-28.
 const PINNED_FALLBACK = [
   'AutoRedTeam-Orchestrator',
-  'AgentRed',
   'Github-API-scan',
   'catchclaw',
   'LLM-Security-Assessment-Framework',
   'coffee-skill',
+  'vero',
 ];
 
 function restHeaders() {
