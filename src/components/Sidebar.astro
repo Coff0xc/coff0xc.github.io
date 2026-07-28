@@ -23,10 +23,10 @@ const { currentPath = '' } = Astro.props;
     </div>
     <div class="aside-bottom">
         <div class="aside-footer">
-            &copy; 2024 — 2026<br>
-            Security Engineering
+            <span data-i18n="common.copyright">&copy;</span> 2024 — 2026<br>
+            <span data-i18n="common.securityEngineering">Security Engineering</span>
         </div>
-        <button id="lang-toggle" class="lang-switch" type="button">ZH / EN</button>
+        <button id="lang-toggle" class="lang-switch" type="button" data-i18n="common.langToggle">ZH / EN</button>
         <button id="theme-toggle" class="theme-switch" type="button">☀ Light</button>
     </div>
 </aside>

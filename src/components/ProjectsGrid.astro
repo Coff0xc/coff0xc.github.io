@@ -1,4 +1,6 @@
 ---
+import { i18n } from '../data/i18n';
+
 interface Project {
   name: string;
   description: string;
@@ -24,7 +26,7 @@ const { projects } = Astro.props;
                         <h3><a href={project.url} target="_blank" rel="noopener">{project.name}</a></h3>
                         {project.language !== 'Unknown' && <span class="item-lang">{project.language}</span>}
                     </div>
-                    <p>{project.description || 'No description available.'}</p>
+                    <p>{project.description || <span data-i18n="common.noDescription">{i18n.en.common.noDescription}</span>}</p>
                     {project.stars > 0 && <span class="item-stars">★ {project.stars}</span>}
                 </div>
             ))}
