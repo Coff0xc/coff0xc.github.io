@@ -6,7 +6,8 @@ dist/
 node_modules/
 
 # generated at build/dev time — fetched fresh by scripts/fetch-*-data.mjs
-src/data/github-data.json
+# Temporarily allow github-data.json for mock data (network issues)
+# src/data/github-data.json
 src/data/skills-data.json
 
 # env
