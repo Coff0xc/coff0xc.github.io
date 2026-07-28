@@ -45,32 +45,45 @@ function updateSEO() {
 }
 
 function updateLanguage(lang: Lang) {
-  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
-  document.documentElement.setAttribute('data-lang', lang);
+  // Batch DOM updates to minimize reflows
+  requestAnimationFrame(() => {
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+    document.documentElement.setAttribute('data-lang', lang);
 
-  document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((el) => {
-    const key = el.getAttribute('data-i18n');
-    if (!key) return;
-    const value = key.split('.').reduce<unknown>((acc, k) => (acc as Record<string, unknown> | undefined)?.[k], i18n[lang]);
-    if (typeof value !== 'string') return;
-    el.textContent = value;
-  });
+    // Use a single read-write cycle to minimize layout thrashing
+    const updates: Array<{ element: HTMLElement; text: string }> = [];
 
-  // Bilingual content baked in at build time for dynamic, non-keyed data
-  // (heatmap month labels, day tooltips) — swapped by attribute pair
-  // instead of an i18n key lookup.
-  document.querySelectorAll<HTMLElement>('[data-zh][data-en]').forEach((el) => {
-    el.textContent = lang === 'zh' ? (el.dataset.zh as string) : (el.dataset.en as string);
-  });
-  document.querySelectorAll<HTMLElement>('[data-tooltip-zh][data-tooltip-en]').forEach((el) => {
-    const value = lang === 'zh' ? (el.dataset.tooltipZh as string) : (el.dataset.tooltipEn as string);
-    el.setAttribute('data-tooltip', value);
-    if (el.hasAttribute('aria-label')) el.setAttribute('aria-label', value);
-  });
+    document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((el) => {
+      const key = el.getAttribute('data-i18n');
+      if (!key) return;
+      const value = key.split('.').reduce<unknown>((acc, k) => (acc as Record<string, unknown> | undefined)?.[k], i18n[lang]);
+      if (typeof value === 'string') {
+        updates.push({ element: el, text: value });
+      }
+    });
 
-  updateThemeButton();
-  updateActiveNav();
-  updateSEO();
+    // Bilingual content
+    document.querySelectorAll<HTMLElement>('[data-zh][data-en]').forEach((el) => {
+      const text = lang === 'zh' ? (el.dataset.zh as string) : (el.dataset.en as string);
+      updates.push({ element: el, text });
+    });
+
+    // Apply all text updates at once
+    updates.forEach(({ element, text }) => {
+      element.textContent = text;
+    });
+
+    // Handle tooltips separately (no reflow impact)
+    document.querySelectorAll<HTMLElement>('[data-tooltip-zh][data-tooltip-en]').forEach((el) => {
+      const value = lang === 'zh' ? (el.dataset.tooltipZh as string) : (el.dataset.tooltipEn as string);
+      el.setAttribute('data-tooltip', value);
+      if (el.hasAttribute('aria-label')) el.setAttribute('aria-label', value);
+    });
+
+    updateThemeButton();
+    updateActiveNav();
+    updateSEO();
+  });
 }
 
 function toggleLanguage() {
