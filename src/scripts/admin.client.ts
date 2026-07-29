@@ -1,6 +1,6 @@
 // Lightweight, zero-infrastructure publishing UI: no OAuth app, no serverless
 // auth proxy. You paste a GitHub fine-grained PAT (repo-scoped, Contents:
-// read/write) that lives only in this browser's localStorage and is sent
+// read/write) that lives only in this page's memory and is sent
 // directly to api.github.com — never through any third-party server.
 // Publishing commits straight to `main`, which the existing deploy workflow
 // picks up automatically.
@@ -10,9 +10,9 @@ const REPO = 'coff0xcblog';
 const BRANCH = 'main';
 const BLOG_PATH = 'src/content/blog';
 const REPORTS_PATH = 'public/reports';
-const PAT_KEY = 'coff0xcblog_admin_pat';
 const AUDIT_LOG_KEY = 'coff0xcblog_admin_audit';
 const API = 'https://api.github.com';
+let token = '';
 
 type PostType = 'article' | 'report';
 
@@ -35,13 +35,17 @@ interface PostForm {
   body: string;
 }
 
-function getToken(): string {
-  return localStorage.getItem(PAT_KEY) || '';
+interface CommitFile {
+  path: string;
+  content: string;
 }
 
-function setToken(token: string) {
-  if (token) localStorage.setItem(PAT_KEY, token);
-  else localStorage.removeItem(PAT_KEY);
+function getToken(): string {
+  return token;
+}
+
+function setToken(value: string) {
+  token = value;
 }
 
 function addAuditLog(entry: Omit<AuditEntry, 'timestamp'>) {
@@ -66,7 +70,7 @@ function clearAuditLogs() {
   localStorage.removeItem(AUDIT_LOG_KEY);
 }
 
-async function gh(path: string, init: RequestInit = {}): Promise<any> {
+async function gh(path: string, init: RequestInit = {}, allowNotFound = false): Promise<any> {
   const token = getToken();
   if (!token) throw new Error('No GitHub token set — paste one above first.');
   const res = await fetch(`${API}${path}`, {
@@ -77,6 +81,7 @@ async function gh(path: string, init: RequestInit = {}): Promise<any> {
       ...(init.headers || {}),
     },
   });
+  if (res.status === 404 && allowNotFound) return null;
   if (!res.ok) {
     const body = await res.text().catch(() => '');
     throw new Error(`GitHub API ${res.status}: ${body.slice(0, 300)}`);
@@ -157,27 +162,58 @@ function parseFrontmatter(raw: string): { data: Record<string, any>; body: strin
   return { data, body: body.trim() };
 }
 
-async function getExistingSha(path: string): Promise<string | undefined> {
-  try {
-    const data = await gh(`/repos/${OWNER}/${REPO}/contents/${path}?ref=${BRANCH}`);
-    return data?.sha;
-  } catch {
-    return undefined;
+async function commitFiles(
+  files: CommitFile[],
+  message: string,
+  postPath: string,
+  expectedPostSha: string | null
+): Promise<string> {
+  const ref = await gh(`/repos/${OWNER}/${REPO}/git/ref/heads/${BRANCH}`);
+  const baseCommit = await gh(`/repos/${OWNER}/${REPO}/git/commits/${ref.object.sha}`);
+  const currentPost = await gh(
+    `/repos/${OWNER}/${REPO}/contents/${postPath}?ref=${baseCommit.sha}`,
+    {},
+    true
+  );
+  if ((currentPost?.sha ?? null) !== expectedPostSha) {
+    throw new Error('This post changed on GitHub — reload it before publishing.');
   }
-}
-
-async function putFile(path: string, base64Content: string, message: string): Promise<void> {
-  const sha = await getExistingSha(path);
-  await gh(`/repos/${OWNER}/${REPO}/contents/${path}`, {
-    method: 'PUT',
+  const blobs = await Promise.all(files.map((file) => gh(`/repos/${OWNER}/${REPO}/git/blobs`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      content: file.content,
+      encoding: 'base64',
+    }),
+  })));
+  const tree = await gh(`/repos/${OWNER}/${REPO}/git/trees`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      base_tree: baseCommit.tree.sha,
+      tree: files.map((file, index) => ({
+        path: file.path,
+        mode: '100644',
+        type: 'blob',
+        sha: blobs[index].sha,
+      })),
+    }),
+  });
+  const commit = await gh(`/repos/${OWNER}/${REPO}/git/commits`, {
+    method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       message,
-      content: base64Content,
-      branch: BRANCH,
-      ...(sha ? { sha } : {}),
+      tree: tree.sha,
+      parents: [baseCommit.sha],
     }),
   });
+  await gh(`/repos/${OWNER}/${REPO}/git/refs/heads/${BRANCH}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ sha: commit.sha, force: false }),
+  });
+  return blobs[files.findIndex((file) => file.path === postPath)].sha;
 }
 
 async function listPosts(): Promise<Array<{ name: string; path: string }>> {
@@ -188,9 +224,9 @@ async function listPosts(): Promise<Array<{ name: string; path: string }>> {
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
-async function loadPostRaw(path: string): Promise<string> {
+async function loadPost(path: string): Promise<{ raw: string; sha: string }> {
   const data = await gh(`/repos/${OWNER}/${REPO}/contents/${path}?ref=${BRANCH}`);
-  return base64ToUtf8(data.content);
+  return { raw: base64ToUtf8(data.content), sha: data.sha };
 }
 
 // ==================== DOM wiring ====================
@@ -226,9 +262,15 @@ function initAdminPage() {
   const publishStatus = $<HTMLElement>('publish-status');
 
   let currentSlug = '';
+  let currentPdfUrl = '';
+  let currentPostSha: string | null = null;
+  let loadedPostPath = '';
 
   function resetForm() {
     currentSlug = '';
+    currentPdfUrl = '';
+    currentPostSha = null;
+    loadedPostPath = '';
     fTitle.value = '';
     fTitleEn.value = '';
     fDate.value = new Date().toISOString().slice(0, 10);
@@ -270,7 +312,7 @@ function initAdminPage() {
     if (!value || value.startsWith('•')) return;
     setToken(value);
     patInput.value = '••••••••••••••••';
-    setStatus(patStatus, 'Token saved to this browser.', 'success');
+    setStatus(patStatus, 'Token saved to this page.', 'success');
 
     // 验证 token 并记录审计日志
     try {
@@ -289,7 +331,7 @@ function initAdminPage() {
     patInput.value = '';
     setStatus(patStatus, 'Token cleared.');
     postSelect.innerHTML = '<option value="">— New post —</option>';
-    addAuditLog({ action: 'token_clear', details: 'Token removed from localStorage' });
+    addAuditLog({ action: 'token_clear', details: 'Token removed from page memory' });
     renderAuditLogs();
   });
 
@@ -298,12 +340,20 @@ function initAdminPage() {
   postSelect.addEventListener('change', async () => {
     if (!postSelect.value) {
       resetForm();
+      publishBtn.disabled = false;
       return;
     }
+    const selectedPath = postSelect.value;
+    loadedPostPath = '';
+    publishBtn.disabled = true;
     try {
-      const raw = await loadPostRaw(postSelect.value);
+      const { raw, sha } = await loadPost(selectedPath);
+      if (postSelect.value !== selectedPath) return;
       const { data, body } = parseFrontmatter(raw);
-      currentSlug = postSelect.value.split('/').pop()!.replace(/\.md$/, '');
+      currentSlug = selectedPath.split('/').pop()!.replace(/\.md$/, '');
+      currentPdfUrl = data.pdfUrl || '';
+      currentPostSha = sha;
+      loadedPostPath = selectedPath;
       fTitle.value = data.title || '';
       fTitleEn.value = data.titleEn || '';
       fDate.value = (data.date || '').slice(0, 10);
@@ -313,16 +363,22 @@ function initAdminPage() {
       fSummaryEn.value = data.summaryEn || '';
       fBody.value = body;
       updatePdfFieldVisibility();
-      setStatus(publishStatus, `Editing ${postSelect.value}`);
+      setStatus(publishStatus, `Editing ${selectedPath}`);
+      publishBtn.disabled = false;
     } catch (err: any) {
+      if (postSelect.value !== selectedPath) return;
       setStatus(publishStatus, `Could not load post: ${err.message}`, 'error');
     }
   });
 
   publishBtn.addEventListener('click', async () => {
     publishBtn.disabled = true;
+    postSelect.disabled = true;
     setStatus(publishStatus, 'Publishing…');
     try {
+      if (postSelect.value !== loadedPostPath) {
+        throw new Error('Wait for the selected post to finish loading.');
+      }
       if (!fTitle.value.trim() || !fTitleEn.value.trim() || !fBody.value.trim()) {
         throw new Error('Title (both languages) and body are required.');
       }
@@ -336,22 +392,31 @@ function initAdminPage() {
         summary: fSummary.value.trim(),
         summaryEn: fSummaryEn.value.trim(),
         type: fType.value as PostType,
-        pdfUrl: '',
+        pdfUrl: fType.value === 'report' ? currentPdfUrl : '',
         body: fBody.value,
       };
 
+      const files: CommitFile[] = [];
+
       if (form.type === 'report' && fPdf.files && fPdf.files[0]) {
         const file = fPdf.files[0];
-        setStatus(publishStatus, 'Uploading PDF…');
+        setStatus(publishStatus, 'Preparing PDF…');
         const buffer = await file.arrayBuffer();
         const pdfPath = `${REPORTS_PATH}/${slug}.pdf`;
-        await putFile(pdfPath, arrayBufferToBase64(buffer), `chore(reports): add ${slug}.pdf`);
         form.pdfUrl = `/reports/${slug}.pdf`;
+        files.push({ path: pdfPath, content: arrayBufferToBase64(buffer) });
       }
 
       setStatus(publishStatus, 'Committing post…');
       const markdown = buildMarkdown(form);
-      await putFile(`${BLOG_PATH}/${slug}.md`, utf8ToBase64(markdown), `content(blog): publish ${slug}`);
+      const postPath = `${BLOG_PATH}/${slug}.md`;
+      files.push({ path: postPath, content: utf8ToBase64(markdown) });
+      const publishedPostSha = await commitFiles(
+        files,
+        `content(blog): ${currentSlug ? 'update' : 'publish'} ${slug}`,
+        postPath,
+        currentPostSha
+      );
 
       const action = currentSlug ? 'update' : 'publish';
       addAuditLog({
@@ -360,6 +425,8 @@ function initAdminPage() {
       });
 
       currentSlug = slug;
+      currentPdfUrl = form.pdfUrl;
+      currentPostSha = publishedPostSha;
       setStatus(publishStatus, `Published ${slug}.md — the site will redeploy automatically in a minute or two.`, 'success');
       await refreshPostList();
       renderAuditLogs();
@@ -367,6 +434,7 @@ function initAdminPage() {
       setStatus(publishStatus, err.message || String(err), 'error');
     } finally {
       publishBtn.disabled = false;
+      postSelect.disabled = false;
     }
   });
 
@@ -374,12 +442,17 @@ function initAdminPage() {
     const auditContainer = $<HTMLElement>('audit-logs');
     const logs = getAuditLogs();
 
+    auditContainer.replaceChildren();
+
     if (logs.length === 0) {
-      auditContainer.innerHTML = '<p class="audit-empty">No activity yet.</p>';
+      const empty = document.createElement('p');
+      empty.className = 'audit-empty';
+      empty.textContent = 'No activity yet.';
+      auditContainer.appendChild(empty);
       return;
     }
 
-    const html = logs.map(log => {
+    for (const log of logs) {
       const time = new Date(log.timestamp).toLocaleString('zh-CN', {
         year: 'numeric', month: '2-digit', day: '2-digit',
         hour: '2-digit', minute: '2-digit', second: '2-digit'
@@ -391,17 +464,22 @@ function initAdminPage() {
         token_clear: '🗑️ 清除令牌'
       }[log.action] || log.action;
 
-      return `
-        <div class="audit-entry">
-          <span class="audit-time">${time}</span>
-          <span class="audit-action">${actionLabel}</span>
-          <span class="audit-details">${log.details}</span>
-          ${log.username ? `<span class="audit-user">@${log.username}</span>` : ''}
-        </div>
-      `;
-    }).join('');
-
-    auditContainer.innerHTML = html;
+      const entry = document.createElement('div');
+      entry.className = 'audit-entry';
+      const fields = [
+        ['audit-time', time],
+        ['audit-action', actionLabel],
+        ['audit-details', log.details],
+        ...(log.username ? [['audit-user', `@${log.username}`]] : []),
+      ];
+      for (const [className, text] of fields) {
+        const field = document.createElement('span');
+        field.className = className;
+        field.textContent = text;
+        entry.appendChild(field);
+      }
+      auditContainer.appendChild(entry);
+    }
   }
 
   const clearAuditBtn = $<HTMLButtonElement>('clear-audit');

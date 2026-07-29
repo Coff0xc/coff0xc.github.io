@@ -14,6 +14,21 @@ interface ParsedSkillInfo {
   whenToUse: string;
 }
 
+function renderTextItems(
+  container: Element,
+  values: string[],
+  tagName: 'li' | 'span',
+  className?: string
+) {
+  const items = values.map((value) => {
+    const item = document.createElement(tagName);
+    if (className) item.className = className;
+    item.textContent = value;
+    return item;
+  });
+  container.replaceChildren(...items);
+}
+
 function parseDescription(desc: string): ParsedSkillInfo {
   const info: ParsedSkillInfo = {
     useCases: [],
@@ -74,9 +89,7 @@ function openSkillDrawer(skill: Skill) {
   }
 
   if (domainsEl) {
-    domainsEl.innerHTML = skill.capabilityDomains
-      .map(domain => `<span class="skill-drawer-domain-tag">${domain}</span>`)
-      .join('');
+    renderTextItems(domainsEl, skill.capabilityDomains, 'span', 'skill-drawer-domain-tag');
   }
 
   // 填充使用场景（什么时候用）
@@ -89,11 +102,10 @@ function openSkillDrawer(skill: Skill) {
   const usageEl = overlay.querySelector('.skill-drawer-usage');
   if (usageEl) {
     if (parsed.useCases.length > 0) {
-      usageEl.innerHTML = parsed.useCases
-        .map(scenario => `<li>${scenario}</li>`)
-        .join('');
+      renderTextItems(usageEl, parsed.useCases, 'li');
       (usageEl as HTMLElement).style.display = 'grid';
     } else {
+      usageEl.replaceChildren();
       (usageEl as HTMLElement).style.display = 'none';
     }
   }
@@ -103,11 +115,10 @@ function openSkillDrawer(skill: Skill) {
   if (techEl) {
     const techSection = techEl.parentElement as HTMLElement | null;
     if (parsed.technologies.length > 0) {
-      techEl.innerHTML = parsed.technologies
-        .map(tech => `<span class="skill-keyword-tag">${tech}</span>`)
-        .join('');
+      renderTextItems(techEl, parsed.technologies, 'span', 'skill-keyword-tag');
       if (techSection) techSection.style.display = 'block';
     } else {
+      techEl.replaceChildren();
       if (techSection) techSection.style.display = 'none';
     }
   }
