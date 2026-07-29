@@ -138,68 +138,52 @@ async function fetchContributionTotals() {
 
 // Fetch contribution calendar for a specific year
 async function fetchContributionCalendarForYear(year) {
-  try {
-    const https = await import('https');
-    const agent = new https.Agent({ rejectUnauthorized: false });
-
-    // GitHub's contributions endpoint accepts ?from and ?to parameters
-    const from = `${year}-01-01`;
-    const to = `${year}-12-31`;
-    const url = `https://github.com/users/${USERNAME}/contributions?from=${from}&to=${to}`;
-
-    return new Promise((resolve, reject) => {
-      https.get(url, {
-        agent,
-        headers: { 'User-Agent': 'Mozilla/5.0 (coff0xcblog data fetch script)' },
-      }, (res) => {
-        if (res.statusCode !== 200) {
-          return reject(new Error(`contributions endpoint -> HTTP ${res.statusCode}`));
-        }
-
-        let html = '';
-        res.on('data', chunk => html += chunk);
-        res.on('end', () => {
-          const totalMatch = html.match(/([\d,]+)\s+contributions?\s+in\s+(\d{4}|the last year)/);
-          const total = totalMatch ? Number(totalMatch[1].replace(/,/g, '')) : 0;
-
-          const dayCells = [];
-          const tdRe = /<td\b([^>]*)>\s*<\/td>/g;
-          let tdMatch;
-          while ((tdMatch = tdRe.exec(html))) {
-            const attrs = tdMatch[1];
-            if (!attrs.includes('ContributionCalendar-day')) continue;
-            const date = attrs.match(/data-date="([\d-]+)"/)?.[1];
-            const idMatch = attrs.match(/\bid="(contribution-day-component-(\d+)-(\d+))"/);
-            const level = attrs.match(/data-level="(\d)"/)?.[1];
-            if (!date || !idMatch || level === undefined) continue;
-            dayCells.push({ date, id: idMatch[1], weekday: Number(idMatch[2]), week: Number(idMatch[3]), level: Number(level) });
-          }
-
-          const counts = new Map();
-          const tooltipRe = /<tool-tip\b([^>]*)>([^<]*)<\/tool-tip>/g;
-          let ttMatch;
-          while ((ttMatch = tooltipRe.exec(html))) {
-            const forId = ttMatch[1].match(/\bfor="([^"]+)"/)?.[1];
-            if (!forId) continue;
-            const countMatch = ttMatch[2].match(/^([\d,]+)/);
-            counts.set(forId, countMatch ? Number(countMatch[1].replace(/,/g, '')) : 0);
-          }
-
-          const days = dayCells.map((d) => ({
-            date: d.date,
-            week: d.week,
-            weekday: d.weekday,
-            level: d.level,
-            count: counts.get(d.id) ?? 0,
-          }));
-
-          resolve({ year, total, days });
-        });
-      }).on('error', reject);
-    });
-  } catch (error) {
-    throw new Error(`fetch failed: ${error.message}`);
+  const from = `${year}-01-01`;
+  const to = `${year}-12-31`;
+  const url = `https://github.com/users/${USERNAME}/contributions?from=${from}&to=${to}`;
+  const response = await fetch(url, {
+    headers: { 'User-Agent': 'Mozilla/5.0 (coff0xcblog data fetch script)' },
+  });
+  if (!response.ok) {
+    throw new Error(`contributions endpoint -> HTTP ${response.status}`);
   }
+
+  const html = await response.text();
+  const totalMatch = html.match(/([\d,]+)\s+contributions?\s+in\s+(\d{4}|the last year)/);
+  const total = totalMatch ? Number(totalMatch[1].replace(/,/g, '')) : 0;
+
+  const dayCells = [];
+  const tdRe = /<td\b([^>]*)>\s*<\/td>/g;
+  let tdMatch;
+  while ((tdMatch = tdRe.exec(html))) {
+    const attrs = tdMatch[1];
+    if (!attrs.includes('ContributionCalendar-day')) continue;
+    const date = attrs.match(/data-date="([\d-]+)"/)?.[1];
+    const idMatch = attrs.match(/\bid="(contribution-day-component-(\d+)-(\d+))"/);
+    const level = attrs.match(/data-level="(\d)"/)?.[1];
+    if (!date || !idMatch || level === undefined) continue;
+    dayCells.push({ date, id: idMatch[1], weekday: Number(idMatch[2]), week: Number(idMatch[3]), level: Number(level) });
+  }
+
+  const counts = new Map();
+  const tooltipRe = /<tool-tip\b([^>]*)>([^<]*)<\/tool-tip>/g;
+  let tooltipMatch;
+  while ((tooltipMatch = tooltipRe.exec(html))) {
+    const forId = tooltipMatch[1].match(/\bfor="([^"]+)"/)?.[1];
+    if (!forId) continue;
+    const countMatch = tooltipMatch[2].match(/^([\d,]+)/);
+    counts.set(forId, countMatch ? Number(countMatch[1].replace(/,/g, '')) : 0);
+  }
+
+  const days = dayCells.map((day) => ({
+    date: day.date,
+    week: day.week,
+    weekday: day.weekday,
+    level: day.level,
+    count: counts.get(day.id) ?? 0,
+  }));
+
+  return { year, total, days };
 }
 
 // Fetch contribution calendars for multiple years

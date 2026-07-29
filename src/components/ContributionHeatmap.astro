@@ -27,10 +27,11 @@ const { calendars } = Astro.props;
 // Sort calendars by year descending (newest first)
 const sortedCalendars = [...calendars].sort((a, b) => b.year - a.year);
 
-// Find 2026 calendar or use the first available
-const currentYear = 2026;
+// Prefer the build year's calendar or use the most recent available.
+const currentYear = new Date().getFullYear();
 const defaultIndex = sortedCalendars.findIndex(cal => cal.year === currentYear);
 const initialIndex = defaultIndex >= 0 ? defaultIndex : 0;
+const initialCalendar = sortedCalendars[initialIndex];
 
 function tooltip(lang: Lang, day: Day): string {
   const t = i18n[lang].heatmap;
@@ -52,9 +53,9 @@ function tooltip(lang: Lang, day: Day): string {
                 </svg>
             </button>
             <div class="heatmap-year-display">
-                <span id="heatmap-current-year" class="heatmap-year-text">2026</span>
+                <span id="heatmap-current-year" class="heatmap-year-text">{initialCalendar?.year ?? currentYear}</span>
                 <div class="heatmap-total">
-                    <strong id="heatmap-total-value">0</strong> <span data-i18n="heatmap.totalSuffix">contributions</span>
+                    <strong id="heatmap-total-value">{initialCalendar?.total.toLocaleString() ?? 0}</strong> <span data-i18n="heatmap.totalSuffix">contributions</span>
                 </div>
             </div>
             <button class="heatmap-nav-btn" id="heatmap-next" aria-label="Next year">

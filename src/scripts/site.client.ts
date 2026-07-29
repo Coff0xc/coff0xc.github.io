@@ -37,6 +37,7 @@ function toggleTheme() {
 }
 
 function updateSEO() {
+  if (!document.getElementById('home')) return;
   const seo = i18n[currentLang].seo;
   document.title = seo.title;
   document.querySelector('meta[name="description"]')?.setAttribute('content', seo.description);

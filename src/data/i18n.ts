@@ -25,7 +25,7 @@ export const i18n = {
       caption: 'AI 安全攻防研究：从 LLM 越狱到 AI Agent 自动化渗透测试',
     },
     okr: {
-      title: '2026 动态',
+      title: '动态',
       lastUpdate: '数据更新于',
       note: '以下为真实 GitHub 活动数据,非目标进度。',
       metrics: {
@@ -137,7 +137,7 @@ export const i18n = {
       caption: 'AI Security R&D: From LLM jailbreaking to AI Agent-powered automated penetration testing',
     },
     okr: {
-      title: '2026 Activity',
+      title: 'Activity',
       lastUpdate: 'Data as of',
       note: 'Real GitHub activity shown below, not fabricated goal targets.',
       metrics: {

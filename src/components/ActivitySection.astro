@@ -50,9 +50,13 @@ const metricI18nKey: Record<keyof Activity, string> = {
 };
 
 const updatedDate = generatedAt.slice(0, 10);
+const currentYear = new Date().getFullYear();
+const activityYear = calendars.find((calendar) => calendar.year === currentYear)?.year
+  ?? calendars[0]?.year
+  ?? currentYear;
 ---
 <section id="okr">
-    <h2 data-i18n="okr.title">2026 Activity</h2>
+    <h2>{activityYear} <span data-i18n="okr.title">Activity</span></h2>
     <div class="activity-updated">
         <span data-i18n="okr.lastUpdate">Data as of</span> {updatedDate}
     </div>

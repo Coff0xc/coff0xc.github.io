@@ -73,8 +73,9 @@ function generateMockCalendar(year) {
   };
 }
 
-// 生成 2024-2026 年的数据
-const calendars = [2026, 2025, 2024].map(year => generateMockCalendar(year));
+const currentYear = new Date().getFullYear();
+const calendars = [currentYear, currentYear - 1, currentYear - 2]
+  .map(year => generateMockCalendar(year));
 
 // 读取现有数据
 const dataPath = join(__dirname, '../src/data/github-data.json');
@@ -83,8 +84,7 @@ const data = JSON.parse(readFileSync(dataPath, 'utf-8'));
 // 更新 contributionCalendars
 data.contributionCalendars = calendars;
 
-// 更新 activity.totalContributions 为 2026 年的数据
-data.activity.totalContributions = calendars.find(c => c.year === 2026)?.total || 0;
+data.activity.totalContributions = calendars.find(calendar => calendar.year === currentYear)?.total || 0;
 
 // 写回文件
 writeFileSync(dataPath, JSON.stringify(data, null, 2));

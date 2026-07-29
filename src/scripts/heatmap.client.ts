@@ -27,11 +27,7 @@ function initHeatmap() {
     isDefault: el.getAttribute('data-is-default') === 'true',
   })).sort((a, b) => b.year - a.year); // Sort descending (newest first)
 
-  // Find the index for year 2026, or use the first one with isDefault=true, or fallback to 0
-  let currentIndex = years.findIndex(y => y.year === 2026);
-  if (currentIndex < 0) {
-    currentIndex = years.findIndex(y => y.isDefault);
-  }
+  let currentIndex = years.findIndex(year => year.isDefault);
   if (currentIndex < 0) {
     currentIndex = 0;
   }
