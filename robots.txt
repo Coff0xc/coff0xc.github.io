@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://coff0xc.github.io/sitemap.xml

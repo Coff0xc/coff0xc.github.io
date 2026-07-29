@@ -19,3 +19,8 @@ src/data/skills-data.json
 npm-debug.log*
 .DS_Store
 Thumbs.db
+
+# local tools / caches
+.claude/settings.local.json
+__pycache__/
+*.py[cod]
